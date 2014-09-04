@@ -13,11 +13,11 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <view key="tableHeaderView" contentMode="scaleToFill" id="FEY-hs-1XI">
-                            <rect key="frame" x="0.0" y="64" width="768" height="44"/>
+                            <rect key="frame" x="0.0" y="64" width="768" height="64"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <subviews>
                                 <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="YGg-dD-Lgz">
-                                    <rect key="frame" x="514" y="7" width="170" height="32"/>
+                                    <rect key="frame" x="514" y="16" width="170" height="32"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                     <fontDescription key="fontDescription" type="system" pointSize="16"/>
                                     <state key="normal" title="Edit Items">
@@ -28,7 +28,7 @@
                                     </connections>
                                 </button>
                                 <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="xgl-AO-LCS">
-                                    <rect key="frame" x="88" y="7" width="170" height="32"/>
+                                    <rect key="frame" x="88" y="16" width="170" height="32"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                     <fontDescription key="fontDescription" type="system" pointSize="16"/>
                                     <state key="normal" title="Reset Checklist">
@@ -39,7 +39,7 @@
                                     </connections>
                                 </button>
                                 <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="4yV-kc-qkx">
-                                    <rect key="frame" x="299" y="7" width="170" height="32"/>
+                                    <rect key="frame" x="299" y="16" width="170" height="32"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                     <fontDescription key="fontDescription" type="system" pointSize="16"/>
                                     <state key="normal" title="Add Item">
@@ -54,7 +54,7 @@
                         </view>
                         <prototypes>
                             <tableViewCell contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="Cell" rowHeight="64" id="Au5-IR-oHj" customClass="ChecklistItemTableViewCell">
-                                <rect key="frame" x="0.0" y="130" width="768" height="64"/>
+                                <rect key="frame" x="0.0" y="150" width="768" height="64"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="Au5-IR-oHj" id="PP9-fp-GNI">
                                     <rect key="frame" x="0.0" y="0.0" width="768" height="63"/>
@@ -126,7 +126,7 @@
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="qLS-kb-dbF" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="864" y="-596"/>
+            <point key="canvasLocation" x="841" y="-596"/>
         </scene>
         <!--Checklist Collection Table View Controller - Checklists-->
         <scene sceneID="DMC-G7-oeU">
@@ -137,22 +137,20 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <view key="tableHeaderView" contentMode="scaleToFill" id="3mQ-JU-s4F">
-                            <rect key="frame" x="0.0" y="64" width="768" height="44"/>
+                            <rect key="frame" x="0.0" y="64" width="768" height="64"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <subviews>
                                 <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="GeV-pk-JFq">
-                                    <rect key="frame" x="464" y="6" width="170" height="32"/>
+                                    <rect key="frame" x="464" y="16" width="170" height="32"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                    <fontDescription key="fontDescription" type="system" pointSize="16"/>
-                                    <state key="normal" title="Edit Checklists">
-                                        <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                                    </state>
+                                    <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="16"/>
+                                    <state key="normal" title="Edit Checklists"/>
                                     <connections>
                                         <action selector="beginEdit:" destination="Jcb-6x-zpd" eventType="touchUpInside" id="peu-12-YCg"/>
                                     </connections>
                                 </button>
                                 <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="V6m-zk-QZI">
-                                    <rect key="frame" x="163" y="6" width="170" height="32"/>
+                                    <rect key="frame" x="155" y="16" width="170" height="32"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                     <fontDescription key="fontDescription" type="system" pointSize="16"/>
                                     <state key="normal" title="Add Checklist">
@@ -165,16 +163,21 @@
                             </subviews>
                             <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                         </view>
+                        <toolbar key="tableFooterView" opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" id="Fu2-rb-pCe">
+                            <rect key="frame" x="0.0" y="246" width="768" height="44"/>
+                            <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
+                            <items/>
+                        </toolbar>
                         <prototypes>
-                            <tableViewCell contentMode="scaleToFill" selectionStyle="blue" accessoryType="disclosureIndicator" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="Cell" rowHeight="64" id="6Cs-ic-dQD" customClass="ChecklistCollectionTableViewCell">
-                                <rect key="frame" x="0.0" y="130" width="768" height="64"/>
+                            <tableViewCell contentMode="scaleToFill" selectionStyle="blue" accessoryType="disclosureIndicator" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="Cell" rowHeight="96" id="6Cs-ic-dQD" customClass="ChecklistCollectionTableViewCell">
+                                <rect key="frame" x="0.0" y="150" width="768" height="96"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="6Cs-ic-dQD" id="81C-iv-jHN">
-                                    <rect key="frame" x="0.0" y="0.0" width="735" height="63"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="735" height="95"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
-                                        <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" misplaced="YES" enabled="NO" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="TYPE" placeholder="anACTION" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="FQv-D0-udU">
-                                            <rect key="frame" x="20" y="16" width="192" height="30"/>
+                                        <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" ambiguous="YES" misplaced="YES" enabled="NO" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="TYPE" placeholder="anACTION" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="FQv-D0-udU">
+                                            <rect key="frame" x="112" y="33" width="192" height="30"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                             <constraints>
                                                 <constraint firstAttribute="width" constant="192" id="zXU-QZ-cb9"/>
@@ -183,23 +186,15 @@
                                             <fontDescription key="fontDescription" type="boldSystem" pointSize="14"/>
                                             <textInputTraits key="textInputTraits"/>
                                         </textField>
-                                        <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" misplaced="YES" contentHorizontalAlignment="right" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="9gT-ZO-SLZ">
-                                            <rect key="frame" x="699" y="20" width="58" height="23"/>
-                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                            <connections>
-                                                <action selector="checkToggled:" destination="6Cs-ic-dQD" eventType="valueChanged" id="ZjD-Qf-O5m"/>
-                                                <action selector="checkedOff:" destination="vqO-Rj-tXd" eventType="valueChanged" id="eDn-Cj-X84"/>
-                                            </connections>
-                                        </switch>
-                                        <textView opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" fixedFrame="YES" bounces="NO" scrollEnabled="NO" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" delaysContentTouches="NO" canCancelContentTouches="NO" bouncesZoom="NO" editable="NO" text="Details" selectable="NO" translatesAutoresizingMaskIntoConstraints="NO" id="qxy-Cw-X1l">
-                                            <rect key="frame" x="203" y="8" width="419" height="48"/>
+                                        <textView opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" fixedFrame="YES" bounces="NO" scrollEnabled="NO" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" delaysContentTouches="NO" canCancelContentTouches="NO" bouncesZoom="NO" editable="NO" text="3 lines" selectable="NO" translatesAutoresizingMaskIntoConstraints="NO" id="qxy-Cw-X1l">
+                                            <rect key="frame" x="241" y="24" width="186" height="48"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                             <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                             <fontDescription key="fontDescription" type="system" pointSize="18"/>
                                             <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                                         </textView>
                                         <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" misplaced="YES" enabled="NO" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="00:00" textAlignment="center" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="pvb-In-kmu">
-                                            <rect key="frame" x="620" y="16" width="71" height="30"/>
+                                            <rect key="frame" x="499" y="33" width="71" height="30"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                             <constraints>
                                                 <constraint firstAttribute="width" constant="71" id="a1v-ay-DOg"/>
@@ -208,22 +203,19 @@
                                             <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                             <textInputTraits key="textInputTraits"/>
                                         </textField>
+                                        <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="TN6-ZP-9Ic">
+                                            <rect key="frame" x="28" y="15" width="66" height="66"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                            <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
+                                        </imageView>
                                     </subviews>
                                     <constraints>
-                                        <constraint firstItem="9gT-ZO-SLZ" firstAttribute="top" secondItem="FQv-D0-udU" secondAttribute="top" id="0ot-8U-zEo"/>
-                                        <constraint firstItem="9gT-ZO-SLZ" firstAttribute="leading" secondItem="pvb-In-kmu" secondAttribute="trailing" constant="8" symbolic="YES" id="4aA-8w-KKR"/>
-                                        <constraint firstAttribute="bottom" secondItem="9gT-ZO-SLZ" secondAttribute="bottom" constant="20" symbolic="YES" id="Af4-AR-r7l"/>
-                                        <constraint firstItem="9gT-ZO-SLZ" firstAttribute="centerY" secondItem="FQv-D0-udU" secondAttribute="centerY" id="Ryu-UA-VgA"/>
                                         <constraint firstAttribute="trailing" secondItem="pvb-In-kmu" secondAttribute="trailing" constant="77" id="Sde-pO-SCA"/>
-                                        <constraint firstItem="9gT-ZO-SLZ" firstAttribute="top" secondItem="81C-iv-jHN" secondAttribute="top" constant="20" symbolic="YES" id="XDR-Q6-rfn"/>
                                         <constraint firstItem="pvb-In-kmu" firstAttribute="baseline" secondItem="FQv-D0-udU" secondAttribute="baseline" id="dFY-Rp-HpL"/>
-                                        <constraint firstItem="FQv-D0-udU" firstAttribute="leading" secondItem="81C-iv-jHN" secondAttribute="leading" constant="20" symbolic="YES" id="gaF-LB-GeA"/>
                                         <constraint firstItem="pvb-In-kmu" firstAttribute="centerY" secondItem="81C-iv-jHN" secondAttribute="centerY" id="mC6-yI-jRN"/>
-                                        <constraint firstAttribute="trailing" secondItem="9gT-ZO-SLZ" secondAttribute="trailing" constant="13" id="zDh-x0-xjO"/>
                                     </constraints>
                                 </tableViewCellContentView>
                                 <connections>
-                                    <outlet property="check" destination="9gT-ZO-SLZ" id="VSq-S4-hpU"/>
                                     <outlet property="nameTextField" destination="qxy-Cw-X1l" id="ZMF-He-ydQ"/>
                                     <outlet property="timeStamp" destination="pvb-In-kmu" id="98f-sl-lco"/>
                                     <outlet property="typeTextField" destination="FQv-D0-udU" id="CFv-dl-pwd"/>
@@ -236,7 +228,7 @@
                             <outlet property="delegate" destination="Jcb-6x-zpd" id="a6e-TP-hM2"/>
                         </connections>
                     </tableView>
-                    <navigationItem key="navigationItem" id="Zrw-Oh-9NZ"/>
+                    <navigationItem key="navigationItem" title="Checklists" id="1tc-ZU-zeA"/>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Wgd-bp-VJP" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
@@ -438,17 +430,24 @@
                                 <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="typeField" borderStyle="roundedRect" placeholder="typeField" clearsOnBeginEditing="YES" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="22A-ig-X1b">
+                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="typeField" borderStyle="roundedRect" placeholder="typeField" clearsOnBeginEditing="YES" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="22A-ig-X1b" customClass="UITextFieldOrdered">
                                 <rect key="frame" x="126" y="84" width="394" height="30"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                <textInputTraits key="textInputTraits"/>
+                                <textInputTraits key="textInputTraits" returnKeyType="next"/>
+                                <connections>
+                                    <outlet property="delegate" destination="OfV-CD-tYM" id="KoI-YN-cgH"/>
+                                    <outlet property="nextField" destination="wlX-yt-rj4" id="o6t-ts-XOF"/>
+                                </connections>
                             </textField>
-                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="nameField" borderStyle="roundedRect" placeholder="nameField" clearsOnBeginEditing="YES" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="wlX-yt-rj4">
+                            <textField opaque="NO" clipsSubviews="YES" tag="1" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="nameField" borderStyle="roundedRect" placeholder="nameField" clearsOnBeginEditing="YES" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="wlX-yt-rj4" customClass="UITextFieldOrdered">
                                 <rect key="frame" x="126" y="147" width="394" height="30"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                <textInputTraits key="textInputTraits"/>
+                                <textInputTraits key="textInputTraits" returnKeyType="done"/>
+                                <connections>
+                                    <outlet property="delegate" destination="OfV-CD-tYM" id="ABx-tQ-ZoS"/>
+                                </connections>
                             </textField>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>

@@ -94,6 +94,9 @@
         //pass data to checklist:
         [cltvc loadChecklist:checklist];
         
+        //set the title to the name of the checklist:
+        [cltvc setTitle:checklist.name];
+        
         //segue will happen automatically at this point
     }
 }
@@ -437,7 +440,7 @@
      return 80;
      }
      */
-    return 80;
+    return 96;
 }
 
 
