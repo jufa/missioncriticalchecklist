@@ -15,10 +15,15 @@
 
 @property (weak, nonatomic) IBOutlet UITextField *typeField;
 @property (weak, nonatomic) IBOutlet UITextField *nameField;
+@property (weak, nonatomic) IBOutlet UINavigationBar *navBar;
+
+@property (weak, nonatomic) IBOutlet UINavigationItem *navTitle;
 
 @property (weak,nonatomic) id <AddChecklistViewControllerDelegate> delegate;
 
 @property (strong,nonatomic) Checklist *currentChecklist;
+@property (strong, nonatomic) NSString *mode;
+
 
 - (IBAction)cancel:(id)sender;
 - (IBAction)save:(id)sender;

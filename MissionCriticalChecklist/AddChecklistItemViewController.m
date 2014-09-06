@@ -7,6 +7,7 @@
 //
 
 #import "AddChecklistItemViewController.h"
+#import "UITextFieldOrdered.h"
 
 @interface AddChecklistItemViewController ()
 
@@ -29,6 +30,38 @@
     // Do any additional setup after loading the view.
     _actionField.text = [self.currentChecklistItem action];
     _detailField.text = [self.currentChecklistItem detail];
+    if ([self.mode isEqual: @"edit"]) {
+        self.navTitle.title = @"Edit Checklist Item";
+        _actionField.clearsOnBeginEditing = NO;
+        _detailField.clearsOnBeginEditing = NO;
+    } else if ([self.mode isEqual: @"add"]) {
+        self.navTitle.title = @"Add Checklist Item";
+        _actionField.clearsOnBeginEditing = YES;
+        _detailField.clearsOnBeginEditing = YES;
+    } else {
+        self.navTitle.title = @"Add or Edit Checklist Item";
+    }
+    
+}
+
+- (void) viewDidAppear:(BOOL)animated {
+    [_actionField becomeFirstResponder];
+}
+
+- (BOOL) textFieldShouldReturn:(UITextField *) textField {
+    
+    BOOL didResign = [textField resignFirstResponder];
+    if (!didResign) return NO;
+    
+    if ([textField isKindOfClass:[UITextFieldOrdered class]])
+        dispatch_async(dispatch_get_current_queue(),
+                       ^ { [[(UITextFieldOrdered *)textField nextField] becomeFirstResponder]; });
+    if(textField == _detailField) {
+        [self saveAndClose];
+        
+    }
+    
+    return YES;
     
 }
 
@@ -49,14 +82,18 @@
 }
 */
 
+- (void) saveAndClose {
+    [self.currentChecklistItem setAction:_actionField.text];
+    [self.currentChecklistItem setDetail:_detailField.text];
+    [self.delegate addChecklistItemViewControllerDidSave:[self currentChecklistItem]];
+}
+
+
 - (IBAction)cancel:(id)sender {
     [self.delegate addChecklistItemViewControllerDidCancel:[self currentChecklistItem]];
 }
 
 - (IBAction)save:(id)sender {
-    [self.currentChecklistItem setAction:_actionField.text];
-    [self.currentChecklistItem setDetail:_detailField.text];
-    [self.delegate addChecklistItemViewControllerDidSave:[self currentChecklistItem]];
-    
+    [self saveAndClose];
 }
 @end

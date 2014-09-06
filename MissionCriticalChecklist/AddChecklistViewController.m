@@ -20,6 +20,7 @@
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
         // Custom initialization
+
     }
     return self;
 }
@@ -30,12 +31,20 @@
     // Do any additional setup after loading the view.
     _typeField.text = [self.currentChecklist type];
     _nameField.text = [self.currentChecklist name];
-    
-    
+    if ([self.mode isEqual: @"edit"]) {
+        self.navTitle.title = @"Edit Checklist";
+        _typeField.clearsOnBeginEditing = NO;
+        _nameField.clearsOnBeginEditing = NO;
+    } else if ([self.mode isEqual: @"add"]) {
+        self.navTitle.title = @"Add Checklist";
+        _typeField.clearsOnBeginEditing = YES;
+        _nameField.clearsOnBeginEditing = YES;
+    } else {
+        self.navTitle.title = @"Add or Edit Checklist";
+    }
 }
 
 - (void) viewDidAppear:(BOOL)animated {
-    _typeField.returnKeyType = UIReturnKeyNext;
     [_typeField becomeFirstResponder];
 }
 
@@ -77,7 +86,6 @@
     [self.currentChecklist setType:_typeField.text];
     [self.currentChecklist setName:_nameField.text];
     [self.delegate addChecklistViewControllerDidSave:[self currentChecklist]];
-    
 }
 
 - (IBAction)cancel:(id)sender {

@@ -12,6 +12,7 @@
 @interface ChecklistCollectionTableViewController ()
 
 @property BOOL inReorderingOperation;
+@property Checklist* checklistToEdit;
 
 @end
 
@@ -23,37 +24,38 @@
 #pragma mark -
 #pragma mark  Add checklist view controller delegate implementation
 -(void) addChecklistViewControllerDidCancel:(Checklist *)checklistToDelete{
-    //delete managed object
-    [self.managedObjectContext deleteObject:checklistToDelete];
+    if(!self.tableView.isEditing){
+        //delete managed object
+        [self.managedObjectContext deleteObject:checklistToDelete];
+    }
     [self dismissViewControllerAnimated:YES completion:nil];
 }
 
 -(void) addChecklistViewControllerDidSave:(Checklist *)checklistToSave{
     
-    
-    //assign the new items index based on last hilited cell and reflow  index values below it:
-    NSIndexPath* path = [self.tableView  indexPathForSelectedRow];
-    NSInteger insertAt = -1;
-    if(path) insertAt = path.row+1;
-    
-    self.inReorderingOperation = YES;
-    
-    NSMutableArray *array = [[self.fetchedResultsController fetchedObjects] mutableCopy];
-    
-    if(insertAt == -1) insertAt = [array count];
-    
-    int newIndex;
-    for (int i=0; i<[array count]; i++)
-    {
-        if(i<path.row+1) newIndex = i;
-        else newIndex= i+1;
-        [(NSManagedObject *)[array objectAtIndex:i] setValue:[NSNumber numberWithInt:i] forKey:@"index"];
+    //if we are not in editing mode, it's a new checklist inserted, if we ARE in editing mode, we are editing an existing checklist and no insertion stuff is needed:
+    if(!self.tableView.isEditing){
+        //assign the new items index based on last hilited cell and reflow  index values below it:
+        NSIndexPath* path = [self.tableView  indexPathForSelectedRow];
+        NSInteger insertAt = -1;
+        if(path) insertAt = path.row+1;
+        
+        self.inReorderingOperation = YES;
+        
+        NSMutableArray *array = [[self.fetchedResultsController fetchedObjects] mutableCopy];
+        
+        if(insertAt == -1) insertAt = [array count];
+        
+        int newIndex;
+        for (int i=0; i<[array count]; i++)
+        {
+            if(i<path.row+1) newIndex = i;
+            else newIndex= i+1;
+            [(NSManagedObject *)[array objectAtIndex:i] setValue:[NSNumber numberWithInt:i] forKey:@"index"];
+        }
+        checklistToSave.index = [NSNumber numberWithInt:insertAt];
+        self.inReorderingOperation = NO;
     }
-    
-    checklistToSave.index = [NSNumber numberWithInt:insertAt];
-    
-    
-    self.inReorderingOperation = NO;
     
     //save managed object
     NSError *error = nil;
@@ -82,10 +84,25 @@
         }
         newChecklist.index = [NSNumber numberWithInt:insertionIndex];
         acvc.currentChecklist = newChecklist;
+        acvc.mode = @"add";
+        //acvc.navigationController.navigationBar.topItem.title = @"Create New Checklist";
     }
+    //segue for modal to edit selected checklist name and type:
+    if( [[segue identifier] isEqualToString:@"editChecklistDetails"]) {
+        
+        AddChecklistViewController *acvc = (AddChecklistViewController*)[segue destinationViewController];
+        acvc.delegate = self;
+        acvc.currentChecklist = self.checklistToEdit;
+        acvc.mode = @"edit";
+        acvc.navigationController.navigationBar.topItem.title = @"Edit Checklist Details";
+    }
+    
+    //segue to show a checklist:
     if ([segue.identifier isEqualToString:@"showChecklist"]) {
         
-        NSIndexPath *indexPath = [self.tableView indexPathForCell:sender];
+        
+        NSIndexPath *indexPath = [self.tableView indexPathForSelectedRow];
+        //NSIndexPath *indexPath = [self.tableView indexPathForCell:sender];
         
         Checklist* checklist = (Checklist*)[self.fetchedResultsController objectAtIndexPath:indexPath];
         
@@ -120,6 +137,9 @@
     
     // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
     // self.navigationItem.rightBarButtonItem = self.editButtonItem;
+    
+    //allow row seletion in editing mode:
+    self.tableView.allowsSelectionDuringEditing = YES;
     
     self.managedObjectContext = [(AppDelegate *) [[UIApplication sharedApplication] delegate] managedObjectContext];
     
@@ -172,24 +192,22 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     
-    [tableView deselectRowAtIndexPath:indexPath animated:NO];
     
-    //[self performSegueWithIdentifier: @"showChecklist" sender: self];
-    
-    //ChecklistTableViewController *cltvc = [[ChecklistTableViewController alloc] initWithStyle:UITableViewStylePlain];
-    /*
-    ChecklistCollectionTableViewCell *cell;
-    cell = (ChecklistCollectionTableViewCell*)[tableView cellForRowAtIndexPath:indexPath];
-    NSString *selectedChecklistName = cell.nameTextField.text;
-    
-    //pass data to checklist:
-    [cltvc loadChecklist:selectedChecklistName];
-    
-    [self performSegueWithIdentifier: @"MySegue" sender: self];
-    
-    [[self navigationController] pushViewController:cltvc animated:YES];
-    */
+    //TODO: add editing functionality if in edit mode:
+    //check if in edit mode:
+    if(self.tableView.isEditing){
+        
+        //how do we go from indexpath to managed object?
+        self.checklistToEdit = (Checklist*)[self.fetchedResultsController objectAtIndexPath:indexPath];
+        
+        //segue to deitor, this time it will be prepopped:
+        [self performSegueWithIdentifier: @"editChecklistDetails" sender: self];
+        
+    } else {
+        //[tableView deselectRowAtIndexPath:indexPath animated:NO];
+        [self performSegueWithIdentifier: @"showChecklist" sender: self];
 
+    }
     
 }
 

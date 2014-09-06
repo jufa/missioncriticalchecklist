@@ -12,6 +12,7 @@
 @interface ChecklistTableViewController ()
 
 @property BOOL inReorderingOperation;
+@property ChecklistItem* checklistItemToEdit;
 
 @end
 
@@ -39,38 +40,40 @@
 #pragma mark -
 #pragma mark  Add checklist item view controller delegate implementation
 -(void) addChecklistItemViewControllerDidCancel:(ChecklistItem *)checklistItemToDelete{
-    //delete managed object
-    [self.managedObjectContext deleteObject:checklistItemToDelete];
+    if(!self.tableView.isEditing){
+        //delete managed object
+        [self.managedObjectContext deleteObject:checklistItemToDelete];
+    }
     [self dismissViewControllerAnimated:YES completion:nil];
 }
 
 -(void) addChecklistItemViewControllerDidSave:(ChecklistItem *)checklistItemToSave{
     
-
-    //assign the new items index based on last hilited cell and reflow  index values below it:
-    NSIndexPath* path = [self.tableView  indexPathForSelectedRow];
-    NSInteger insertAt = -1;
-    if(path) insertAt = path.row+1;
-    
-    self.inReorderingOperation = YES;
-    
-    NSMutableArray *array = [[self.fetchedResultsController fetchedObjects] mutableCopy];
-    
-    if(insertAt == -1) insertAt = [array count];
+    if(!self.tableView.isEditing){
+        //assign the new items index based on last hilited cell and reflow  index values below it:
+        NSIndexPath* path = [self.tableView  indexPathForSelectedRow];
+        NSInteger insertAt = -1;
+        if(path) insertAt = path.row+1;
         
-    int newIndex;
-    for (int i=0; i<[array count]; i++)
-    {
-        if(i<path.row+1) newIndex = i;
-        else newIndex= i+1;
-        [(NSManagedObject *)[array objectAtIndex:i] setValue:[NSNumber numberWithInt:i] forKey:@"index"];
+        self.inReorderingOperation = YES;
+        
+        NSMutableArray *array = [[self.fetchedResultsController fetchedObjects] mutableCopy];
+        
+        if(insertAt == -1) insertAt = [array count];
+            
+        int newIndex;
+        for (int i=0; i<[array count]; i++)
+        {
+            if(i<path.row+1) newIndex = i;
+            else newIndex= i+1;
+            [(NSManagedObject *)[array objectAtIndex:i] setValue:[NSNumber numberWithInt:i] forKey:@"index"];
+        }
+        
+        checklistItemToSave.index = [NSNumber numberWithInt:insertAt];
+        
+        
+        self.inReorderingOperation = NO;
     }
-    
-    checklistItemToSave.index = [NSNumber numberWithInt:insertAt];
-    
-    
-    self.inReorderingOperation = NO;
-    
     //save managed object
     NSError *error = nil;
     NSManagedObjectContext *context =  self.managedObjectContext;
@@ -98,9 +101,18 @@
         //must use the mutable set method. it will automatically dispatch the right event to ensure inverse relationship is set
         NSMutableSet *cli = [self.checklist mutableSetValueForKey:@"checklistItems"];
         [cli addObject:newChecklistItem];
-
+        acvc.mode = @"add";
         acvc.currentChecklistItem = newChecklistItem;
     }
+    //segue for modal to edit selected checklist name and type:
+    if( [[segue identifier] isEqualToString:@"editChecklistItemDetails"]) {
+        
+        AddChecklistItemViewController *acvc = (AddChecklistItemViewController*)[segue destinationViewController];
+        acvc.delegate = self;
+        acvc.currentChecklistItem = self.checklistItemToEdit;
+        acvc.mode = @"edit";
+    }
+
     if( [[segue identifier] isEqualToString:@"showChecklist"]) {
         NSError *error = nil;
         if(![[self fetchedResultsController] performFetch:&error]){
@@ -125,6 +137,9 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    
+    //allow row seletion in editing mode:
+    self.tableView.allowsSelectionDuringEditing = YES;
     
     // Uncomment the following line to preserve selection between presentations.
     // self.clearsSelectionOnViewWillAppear = NO;
@@ -176,6 +191,28 @@
     [cell setTimestamp:checklistItem.timestamp];
     return cell;
 }
+
+#pragma mark - User interaction
+
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    
+    //check if in edit mode:
+    if(self.tableView.isEditing){
+        
+        //how do we go from indexpath to managed object?
+        self.checklistItemToEdit = (ChecklistItem*)[self.fetchedResultsController objectAtIndexPath:indexPath];
+        
+        //segue to deitor, this time it will be prepopped:
+        [self performSegueWithIdentifier: @"editChecklistItemDetails" sender: self];
+        
+    } else {
+        ;
+        
+    }
+    
+}
+
 
 /*
 -(NSString*)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section {
