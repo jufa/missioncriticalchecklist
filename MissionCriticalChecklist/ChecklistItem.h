@@ -18,6 +18,7 @@
 @property (nonatomic, retain) NSNumber * index;
 @property (nonatomic, retain) NSString * action;
 @property (nonatomic, retain) NSString * type;
+@property (nonatomic, retain) NSString * icon;
 @property (nonatomic, retain) NSDate  * timestamp;
 @property (nonatomic, retain) Checklist *checklist;
 

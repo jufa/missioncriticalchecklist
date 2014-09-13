@@ -16,6 +16,7 @@
 @dynamic detail;
 @dynamic index;
 @dynamic action;
+@dynamic icon;
 @dynamic type;
 @dynamic checklist;
 @dynamic timestamp;

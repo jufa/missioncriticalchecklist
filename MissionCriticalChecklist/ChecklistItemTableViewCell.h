@@ -7,6 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "Utils.h"
 @protocol ChecklistItemTableViewCellDelegate;
 @interface ChecklistItemTableViewCell : UITableViewCell
 @property (weak, nonatomic) IBOutlet UITextField *actionTextField;
@@ -14,11 +15,13 @@
 @property (weak, nonatomic) IBOutlet UISwitch *check;
 @property (weak, nonatomic) IBOutlet UITextField *timeStamp;
 @property NSInteger index;
+@property (weak, nonatomic) IBOutlet UIImageView *icon;
 - (IBAction)checkToggled:(id)sender;
 -(void)editingModeStart;
 -(void)editingModeEnd;
 -(void)reset;
 -(void)setTimestamp:(NSDate *)date;
+-(void)setDetailText:(NSString*)text;
 
 @end
 

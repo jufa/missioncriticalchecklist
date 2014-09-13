@@ -13,6 +13,7 @@
 @property (weak, nonatomic) IBOutlet UITextView *nameTextField;
 @property (weak, nonatomic) IBOutlet UISwitch *check;
 @property (weak, nonatomic) IBOutlet UITextField *timeStamp;
+@property (weak, nonatomic) IBOutlet UIImageView *icon;
 @property NSInteger index;
 - (IBAction)checkToggled:(id)sender;
 -(void)editingModeStart;

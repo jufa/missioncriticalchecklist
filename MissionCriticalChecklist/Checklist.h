@@ -15,6 +15,7 @@
 
 @property (nonatomic, retain) NSString * name;
 @property (nonatomic, retain) NSString * type;
+@property (nonatomic, retain) NSString * icon;
 @property (nonatomic, retain) NSNumber * index;
 @property (nonatomic, retain) NSSet *checklistItems;
 @end

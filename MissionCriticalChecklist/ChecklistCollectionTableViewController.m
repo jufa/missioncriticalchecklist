@@ -8,7 +8,6 @@
 
 #import "ChecklistCollectionTableViewController.h"
 
-
 @interface ChecklistCollectionTableViewController ()
 
 @property BOOL inReorderingOperation;

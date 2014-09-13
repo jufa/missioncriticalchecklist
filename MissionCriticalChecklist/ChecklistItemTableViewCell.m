@@ -10,11 +10,12 @@
 
 @implementation ChecklistItemTableViewCell
 
+
 - (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier
 {
     self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
     if (self) {
-        // Initialization code
+        // @see: http://justabunchoftyping.com/fix-for-ios7-uitextview-issues
     }
     return self;
 }
@@ -33,6 +34,11 @@
     self.check.enabled = selected;
     
 }
+
+-(void) setDetailText:(NSString*)text{
+    self.detailTextField.text = text;
+}
+
 
 -(void) editingModeStart {
     [self.check setHidden:YES];

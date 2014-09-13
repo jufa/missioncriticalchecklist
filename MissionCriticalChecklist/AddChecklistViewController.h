@@ -8,6 +8,8 @@
 
 #import <UIKit/UIKit.h>
 #import "Checklist.h"
+#import "ChecklistItemIcons.h"
+
 
 @protocol AddChecklistViewControllerDelegate;
 
@@ -21,6 +23,7 @@
 
 @property (weak,nonatomic) id <AddChecklistViewControllerDelegate> delegate;
 
+@property (weak, nonatomic) IBOutlet UICollectionView *iconCollectionViewController;
 @property (strong,nonatomic) Checklist *currentChecklist;
 @property (strong, nonatomic) NSString *mode;
 

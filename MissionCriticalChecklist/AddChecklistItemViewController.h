@@ -8,10 +8,11 @@
 
 #import <UIKit/UIKit.h>
 #import "ChecklistItem.h"
+#import "ChecklistItemIcons.h"
 
 @protocol AddChecklistItemViewControllerDelegate;
 
-@interface AddChecklistItemViewController : UIViewController
+@interface AddChecklistItemViewController : UIViewController <UICollectionViewDataSource, UICollectionViewDelegate>
 
 @property (weak, nonatomic) IBOutlet UITextField *actionField;
 @property (weak, nonatomic) IBOutlet UITextField *detailField;
@@ -21,6 +22,7 @@
 
 @property (strong,nonatomic) ChecklistItem *currentChecklistItem;
 @property (strong,nonatomic) NSString *mode;
+@property (weak, nonatomic) IBOutlet UICollectionView *iconCollectionViewController;
 
 - (IBAction)cancel:(id)sender;
 - (IBAction)save:(id)sender;

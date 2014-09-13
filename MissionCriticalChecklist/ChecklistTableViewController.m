@@ -16,7 +16,9 @@
 
 @end
 
-@implementation ChecklistTableViewController
+@implementation ChecklistTableViewController {
+    NSMutableArray *iconArray;
+}
 
 
 @synthesize fetchedResultsController = _fetchedResultsController;
@@ -147,7 +149,7 @@
     // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
     // self.navigationItem.rightBarButtonItem = self.editButtonItem;
     
-
+    iconArray = ChecklistItemIcons.iconList;
 
 }
 
@@ -185,10 +187,15 @@
     // Configure the cell...
     ChecklistItem *checklistItem = [self.fetchedResultsController objectAtIndexPath:indexPath];
     cell.actionTextField.text = checklistItem.action;
-    cell.detailTextField.text = checklistItem.detail;//NSString stringWithFormat:@"%@",checklistItem.index];
+    [cell setDetailText:checklistItem.detail];
+
     //switch:
     [cell.check setOn:checklistItem.checked.boolValue animated:NO];
     [cell setTimestamp:checklistItem.timestamp];
+    //image:
+    NSString *imageToLoad = [NSString stringWithFormat:@"%@.png", checklistItem.icon];
+    cell.icon.image = [UIImage imageNamed:imageToLoad];
+    
     return cell;
 }
 

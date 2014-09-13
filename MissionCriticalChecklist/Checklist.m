@@ -15,6 +15,7 @@
 @dynamic name;
 @dynamic type;
 @dynamic index;
+@dynamic icon;
 @dynamic checklistItems;
 
 @end

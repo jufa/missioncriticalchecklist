@@ -9,6 +9,7 @@
 #import <UIKit/UIKit.h>
 #import "AddChecklistItemViewController.h"
 #import "ChecklistItem.h"
+#import "ChecklistItemIcons.h"
 #import "Checklist.h"
 #import "ChecklistItemTableViewCell.h"
 #import "AppDelegate.h"

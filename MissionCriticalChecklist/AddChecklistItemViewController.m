@@ -8,12 +8,15 @@
 
 #import "AddChecklistItemViewController.h"
 #import "UITextFieldOrdered.h"
+#import "UICollectionViewCellWithImage.h"
 
 @interface AddChecklistItemViewController ()
 
 @end
 
-@implementation AddChecklistItemViewController
+@implementation AddChecklistItemViewController {
+    NSMutableArray *iconArray; //will hold string reference names of icon images
+}
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
@@ -42,6 +45,11 @@
         self.navTitle.title = @"Add or Edit Checklist Item";
     }
     
+    iconArray = ChecklistItemIcons.iconList;
+    
+    //allow selection (single) for the iconCVC:
+    self.iconCollectionViewController.allowsSelection = YES;
+    self.iconCollectionViewController.allowsMultipleSelection = NO;
 }
 
 - (void) viewDidAppear:(BOOL)animated {
@@ -96,4 +104,62 @@
 - (IBAction)save:(id)sender {
     [self saveAndClose];
 }
+
+#pragma mark Collection View Methods
+-(NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView{
+    return 1;
+}
+-(NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section{
+    return [iconArray count];
+}
+-(UICollectionViewCell*)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
+    UICollectionViewCellWithImage* cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"Cell" forIndexPath:indexPath];
+    
+    NSString *imageToLoad = [NSString stringWithFormat:@"%@.png", [iconArray objectAtIndex: indexPath.row]];
+    cell.imageView.image = [UIImage imageNamed:imageToLoad];
+    
+    return cell;
+}
+
+- (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
+    //NSLog([NSString stringWithFormat:@"item selected is %d", indexPath.row]);
+    
+    //get the string name of the icon at that indexPath rox
+    NSString *iconName = [iconArray objectAtIndex: indexPath.row];
+    
+    //set the current checklist items icon name to this:
+    self.currentChecklistItem.icon = iconName;
+    
+    UICollectionViewCell* cell = (UICollectionViewCell*) [collectionView cellForItemAtIndexPath:indexPath];
+    cell.backgroundColor = [UIColor lightGrayColor];
+    
+}
+
+-(void)collectionView:(UICollectionView *)collectionView didUnhighlightItemAtIndexPath:(NSIndexPath *)indexPath {
+    //NSLog([NSString stringWithFormat:@"item unselected is %d", indexPath.row]);
+    
+    
+    NSArray *prevSelections = [collectionView indexPathsForSelectedItems];
+    
+    UICollectionViewCell* cellToClear;
+    for(NSIndexPath* i in prevSelections){
+        cellToClear = (UICollectionViewCell*) [collectionView cellForItemAtIndexPath:i];
+        cellToClear.backgroundColor = [UIColor clearColor];
+    }
+    
+    UICollectionViewCell* cell = (UICollectionViewCell*) [collectionView cellForItemAtIndexPath:indexPath];
+    cell.backgroundColor = [UIColor whiteColor];
+    
+}
+
+- (BOOL)collectionView:(UICollectionView *)collectionView shouldHighlightItemAtIndexPath:(NSIndexPath *)indexPath {
+    return YES;
+}
+
+
+
+
+
+
+
 @end

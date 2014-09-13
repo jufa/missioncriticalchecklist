@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <model userDefinedModelVersionIdentifier="" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="5064" systemVersion="13E28" minimumToolsVersion="Automatic" macOSVersion="Automatic" iOSVersion="Automatic">
     <entity name="Checklist" representedClassName="Checklist" syncable="YES">
+        <attribute name="icon" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="index" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
         <attribute name="name" optional="YES" attributeType="String" defaultValueString="NAME" syncable="YES"/>
         <attribute name="type" optional="YES" attributeType="String" defaultValueString="TYPE" syncable="YES"/>
@@ -10,13 +11,14 @@
         <attribute name="action" optional="YES" attributeType="String" defaultValueString="ACTION" syncable="YES"/>
         <attribute name="checked" optional="YES" attributeType="Boolean" defaultValueString="NO" syncable="YES"/>
         <attribute name="detail" optional="YES" attributeType="String" defaultValueString="DETAIL" syncable="YES"/>
+        <attribute name="icon" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="index" attributeType="Integer 32" defaultValueString="0" indexed="YES" syncable="YES"/>
         <attribute name="timestamp" optional="YES" attributeType="Date" syncable="YES"/>
         <attribute name="type" optional="YES" attributeType="String" defaultValueString="TYPE" syncable="YES"/>
         <relationship name="checklist" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Checklist" inverseName="checklistItems" inverseEntity="Checklist" syncable="YES"/>
     </entity>
     <elements>
-        <element name="Checklist" positionX="-272" positionY="48" width="128" height="103"/>
-        <element name="ChecklistItem" positionX="-54" positionY="0" width="128" height="148"/>
+        <element name="Checklist" positionX="-272" positionY="48" width="128" height="120"/>
+        <element name="ChecklistItem" positionX="-54" positionY="0" width="128" height="165"/>
     </elements>
 </model>
