@@ -1,22 +1,23 @@
 //
-//  ChecklistTableViewController.m
+//  ChecklistViewController.m
 //  MissionCriticalChecklist
 //
 //  Created by Jeremy Kuzub on 2014-08-02.
 //  Copyright (c) 2014 jufaintermedia. All rights reserved.
 //
 
-#import "ChecklistTableViewController.h"
+#import "ChecklistViewController.h"
 
 
-@interface ChecklistTableViewController ()
+@interface ChecklistViewController ()
 
 @property BOOL inReorderingOperation;
 @property ChecklistItem* checklistItemToEdit;
+@property BOOL checklistComplete;
 
 @end
 
-@implementation ChecklistTableViewController {
+@implementation ChecklistViewController {
     NSMutableArray *iconArray;
 }
 
@@ -30,8 +31,8 @@
     self.checklist = checklist;
     
     self.managedObjectContext = [(AppDelegate *) [[UIApplication sharedApplication] delegate] managedObjectContext];
-
-
+    
+    
     NSError *error = nil;
     if(![[self fetchedResultsController] performFetch:&error]){
         NSLog(@"Error in fetching checklist: %@",error);
@@ -62,7 +63,7 @@
         NSMutableArray *array = [[self.fetchedResultsController fetchedObjects] mutableCopy];
         
         if(insertAt == -1) insertAt = [array count];
-            
+        
         int newIndex;
         for (int i=0; i<[array count]; i++)
         {
@@ -84,6 +85,8 @@
     }
     [self dismissViewControllerAnimated:YES completion:nil];
     [self.tableView reloadData];
+    
+    [self refreshInterface];
 }
 
 -(void) prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
@@ -114,7 +117,7 @@
         acvc.currentChecklistItem = self.checklistItemToEdit;
         acvc.mode = @"edit";
     }
-
+    
     if( [[segue identifier] isEqualToString:@"showChecklist"]) {
         NSError *error = nil;
         if(![[self fetchedResultsController] performFetch:&error]){
@@ -125,14 +128,14 @@
 }
 
 #pragma mark - INIT
-- (id)initWithStyle:(UITableViewStyle)style
+- (id)init:(UITableViewStyle)style
 {
-    self = [super initWithStyle:style];
+    //self = [super initWithStyle:style];
     //for some reason this goes out of scope on function exit:
     if (self) {
         // Custom initialization
         self.managedObjectContext = [(AppDelegate *) [[UIApplication sharedApplication] delegate] managedObjectContext];
-        }
+    }
     return self;
 }
 
@@ -150,7 +153,11 @@
     // self.navigationItem.rightBarButtonItem = self.editButtonItem;
     
     iconArray = ChecklistItemIcons.iconList;
-
+    
+    self.checklistComplete = YES; //init;
+    
+    [self refreshInterface];
+    
 }
 
 - (void)didReceiveMemoryWarning
@@ -188,10 +195,11 @@
     ChecklistItem *checklistItem = [self.fetchedResultsController objectAtIndexPath:indexPath];
     cell.actionTextField.text = checklistItem.action;
     [cell setDetailText:checklistItem.detail];
-
+    
     //switch:
     [cell.check setOn:checklistItem.checked.boolValue animated:NO];
     [cell setTimestamp:checklistItem.timestamp];
+    
     //image:
     NSString *imageToLoad = [NSString stringWithFormat:@"%@.png", checklistItem.icon];
     cell.icon.image = [UIImage imageNamed:imageToLoad];
@@ -222,9 +230,9 @@
 
 
 /*
--(NSString*)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section {
-    return [[[self.fetchedResultsController sections] objectAtIndex:section] action];
-}
+ -(NSString*)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section {
+ return [[[self.fetchedResultsController sections] objectAtIndex:section] action];
+ }
  */
 
 
@@ -249,29 +257,29 @@
         
         //now expect the FRC to trigger methods to allow table update.
         
-
+        
         
     } else if (editingStyle == UITableViewCellEditingStyleInsert) {
         // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
-    }   
+    }
 }
 
 
 /*
-// Override to support rearranging the table view.
-- (void)tableView:(UITableView *)tableView moveRowAtIndexPath:(NSIndexPath *)fromIndexPath toIndexPath:(NSIndexPath *)toIndexPath
-{
-}
-*/
+ // Override to support rearranging the table view.
+ - (void)tableView:(UITableView *)tableView moveRowAtIndexPath:(NSIndexPath *)fromIndexPath toIndexPath:(NSIndexPath *)toIndexPath
+ {
+ }
+ */
 
 /*
-// Override to support conditional rearranging of the table view.
-- (BOOL)tableView:(UITableView *)tableView canMoveRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    // Return NO if you do not want the item to be re-orderable.
-    return YES;
-}
-*/
+ // Override to support conditional rearranging of the table view.
+ - (BOOL)tableView:(UITableView *)tableView canMoveRowAtIndexPath:(NSIndexPath *)indexPath
+ {
+ // Return NO if you do not want the item to be re-orderable.
+ return YES;
+ }
+ */
 
 #pragma mark - Fetch Results Controller section
 -(NSFetchedResultsController*) fetchedResultsController {
@@ -303,7 +311,7 @@
         [btn setTitle:@"Edit" forState:UIControlStateNormal];
         //end editing and commit changes:
         [self.tableView setEditing:NO animated:YES];
-
+        
         
         NSError *error;
         BOOL success = [self.fetchedResultsController performFetch:&error];
@@ -318,6 +326,7 @@
             // Handle error
         }
         
+        /* there is a bug here in that we are trying to talk to cells as if there is and equal number of cell objects as array elements - there is not since cells get reused.
         //set all cells into editing mode:
         NSMutableArray *cells = [[NSMutableArray alloc] init];
         for (NSInteger j = 0; j < [self.tableView numberOfSections]; ++j)
@@ -331,6 +340,7 @@
         {
             [cell editingModeEnd];
         }
+         */
         
         
         [self.tableView reloadData]; //debug
@@ -340,23 +350,6 @@
         [btn setTitle:@"Done Editing" forState:UIControlStateNormal];
         [self.tableView setEditing:YES animated:YES];
         
-        //set all cells into editing mode:
-        
-        /*
-        NSMutableArray *cells = [[NSMutableArray alloc] init];
-        for (NSInteger j = 0; j < [self.tableView numberOfSections]; ++j)
-        {
-            int jmax = [self.tableView numberOfRowsInSection:j];
-            for (NSInteger i = 0; i < jmax; ++i)
-            {
-                [cells addObject:[self.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:i inSection:j]]];
-            }
-        }
-        for (ChecklistItemTableViewCell *cell in cells)
-        {
-            [cell editingModeStart];
-        }
-        */
         
         
     }
@@ -373,14 +366,15 @@
         [(NSManagedObject *)[array objectAtIndex:i] setValue:[NSNumber numberWithBool:NO] forKey:@"checked"];
         [(NSManagedObject *)[array objectAtIndex:i] setValue:nil forKey:@"timestamp"];
     }
-
-
+    
+    
     //and resave the whole managed object context:
     NSError *error;
     [self.managedObjectContext save:&error];
     
     [self.tableView reloadData];
-   
+    [self refreshInterface];
+    
     
 }
 
@@ -412,13 +406,13 @@
             cell.detailTextField.text = cli.detail;
             [cell.check setOn: cli.checked.boolValue];
             [cell setTimestamp:cli.timestamp];
-             }
+        }
             break;
             
         case NSFetchedResultsChangeMove:
             if(!self.inReorderingOperation){
-            //[tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:UITableViewRowAnimationFade];
-            //[tableView insertRowsAtIndexPaths:[NSArray arrayWithObject:newIndexPath] withRowAnimation:UITableViewRowAnimationFade];
+                //[tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:UITableViewRowAnimationFade];
+                //[tableView insertRowsAtIndexPaths:[NSArray arrayWithObject:newIndexPath] withRowAnimation:UITableViewRowAnimationFade];
             }
             break;
             
@@ -449,7 +443,7 @@
         [(NSManagedObject *)[array objectAtIndex:i] setValue:[NSNumber numberWithInt:i] forKey:@"index"];
     }
     
-
+    
     self.inReorderingOperation = NO;
     
     
@@ -464,12 +458,12 @@
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     return 80;
-
+    
 }
 
 
 - (IBAction)checkedOff:(id)sender {
-
+    
     //what switch? get reference so we can determine state.
     UISwitch *sw = (UISwitch *)sender;
     
@@ -481,7 +475,7 @@
     
     //alternatively we can just grab the selected row, since the row has to have been selected in order to toggle the switch.
     NSIndexPath *indexPath = [self.tableView indexPathForSelectedRow];
-
+    
     //ok, so now we know the index of the checked item, lets  update that in the managed object
     ChecklistItem* cli = [[_fetchedResultsController fetchedObjects] objectAtIndex:indexPath.row];
     
@@ -489,22 +483,100 @@
     cli.checked = [NSNumber numberWithBool:sw.isOn];
     
     cli.timestamp = [NSDate date];
-
+    
     //and resave the whole managed object context:
     NSError *error;
     [self.managedObjectContext save:&error];
     
+    
+    //hilite next task item, scroll the view:
+    NSIndexPath *currRow = self.tableView.indexPathForSelectedRow;
+    if(currRow.row < [Utils getTotalRows:self.tableView] - 1 ) {
+        NSIndexPath *nextRow = [NSIndexPath  indexPathForRow:currRow.row + 1 inSection:currRow.section];
+        //NSLog(@"newIndexPath: %@", newIndexPath);
+        [self.tableView selectRowAtIndexPath:nextRow animated:YES scrollPosition:UITableViewScrollPositionMiddle];
+    }
+    
+    //update footer:
+    [self refreshInterface];
+    
+}
+
+- (void) refreshInterface {
+    [self updateFooter];
+    //TODO: more may be added later
+}
+
+#pragma mark - Footer Management
+
+- (void) updateFooter {
+    // find out how finished we are
+    // go through all items
+    int totalItems = [[_fetchedResultsController fetchedObjects] count];
+    ChecklistItem* cli;
+    int checkedItems = 0;
+    for (int i = 0; i < totalItems; i++){
+        cli = [[_fetchedResultsController fetchedObjects] objectAtIndex:i];
+        if (cli.checked.boolValue == YES) {
+            checkedItems++;
+        }
+    }
+    
+    // convert to percent and so on
+    // update footer text:
+    NSString *footerString;
+    footerString = [NSString stringWithFormat:@"%d / %d items completed", checkedItems, totalItems];
+    self.footerTextField.text = footerString;
+    //update footer diagonal stripes:
+    NSString *imageName;
+    if(totalItems == checkedItems) {
+        imageName = @"divider-green.png";
+        //smooth scoll up to reveal extra buttons:
+        /*
+         [self.view layoutIfNeeded];
+        self.footerConstraintBottomSpace.constant = -60;
+        self.tableViewConstraintBottomSpace.constant = 300;
+
+        [UIView animateWithDuration:0.5f
+                         animations:^{
+                             [self.view layoutIfNeeded]; // Called on parent view
+                         }];
+         */
+        self.checklistComplete = YES;
+    } else {
+        imageName = @"divider-yellow.png";
+        if(self.checklistComplete){
+            /*
+            [self.view layoutIfNeeded];
+            self.footerConstraintBottomSpace.constant = -60;
+            self.tableViewConstraintBottomSpace.constant = 60;
+            [UIView animateWithDuration:0.5f
+                             animations:^{
+                                 [self.view layoutIfNeeded]; // Called on parent view
+                             }];
+            */
+            self.checklistComplete = NO;
+        }
+
+    }
+    self.footerImageLeft.image = [UIImage imageNamed:imageName];
+    self.footerImageRight.image = [UIImage imageNamed:imageName];
+    
+}
+#pragma mark - NextChecklist
+- (IBAction)nextChecklist:(id)sender {
+    
 }
 
 /*
-#pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
-{
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
-}
-*/
+ #pragma mark - Navigation
+ 
+ // In a storyboard-based application, you will often want to do a little preparation before navigation
+ - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
+ {
+ // Get the new view controller using [segue destinationViewController].
+ // Pass the selected object to the new view controller.
+ }
+ */
 
 @end

@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		3F01D48919DB6555003360F9 /* ChecklistCollectionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3F01D48819DB6555003360F9 /* ChecklistCollectionViewController.m */; };
+		3F01D48C19DB99F4003360F9 /* ChecklistViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3F01D48B19DB99F4003360F9 /* ChecklistViewController.m */; };
 		3F0417C819B7F6150082FD0B /* UITextFieldOrdered.m in Sources */ = {isa = PBXBuildFile; fileRef = 3F0417C719B7F6150082FD0B /* UITextFieldOrdered.m */; };
 		3FAAC5EE19A9205B00EC4046 /* AddChecklistViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3FAAC5ED19A9205B00EC4046 /* AddChecklistViewController.m */; };
 		3FAAC5F119AE798300EC4046 /* Checklist.m in Sources */ = {isa = PBXBuildFile; fileRef = 3FAAC5F019AE798300EC4046 /* Checklist.m */; };
@@ -50,6 +52,11 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		3F01D48719DB6555003360F9 /* ChecklistCollectionViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ChecklistCollectionViewController.h; sourceTree = "<group>"; };
+		3F01D48819DB6555003360F9 /* ChecklistCollectionViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ChecklistCollectionViewController.m; sourceTree = "<group>"; };
+		3F01D48A19DB99F4003360F9 /* ChecklistViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ChecklistViewController.h; sourceTree = "<group>"; };
+		3F01D48B19DB99F4003360F9 /* ChecklistViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ChecklistViewController.m; sourceTree = "<group>"; };
+		3F01D48E19E45C2F003360F9 /* MissionCriticalChecklist 2.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "MissionCriticalChecklist 2.xcdatamodel"; sourceTree = "<group>"; };
 		3F0417C619B7F6150082FD0B /* UITextFieldOrdered.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UITextFieldOrdered.h; sourceTree = "<group>"; };
 		3F0417C719B7F6150082FD0B /* UITextFieldOrdered.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UITextFieldOrdered.m; sourceTree = "<group>"; };
 		3FAAC5EC19A9205B00EC4046 /* AddChecklistViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AddChecklistViewController.h; sourceTree = "<group>"; };
@@ -123,6 +130,13 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		3F01D48D19E45BC0003360F9 /* ChecklistHistory */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = ChecklistHistory;
+			sourceTree = "<group>";
+		};
 		3F0417C419B7C6450082FD0B /* ChecklistCollection */ = {
 			isa = PBXGroup;
 			children = (
@@ -134,6 +148,8 @@
 				3FAE270619A5611C00B4E2B5 /* ChecklistCollectionTableViewCell.m */,
 				3FAAC5EC19A9205B00EC4046 /* AddChecklistViewController.h */,
 				3FAAC5ED19A9205B00EC4046 /* AddChecklistViewController.m */,
+				3F01D48719DB6555003360F9 /* ChecklistCollectionViewController.h */,
+				3F01D48819DB6555003360F9 /* ChecklistCollectionViewController.m */,
 			);
 			name = ChecklistCollection;
 			sourceTree = "<group>";
@@ -150,6 +166,8 @@
 				3FF649C7198F17F400D189CC /* ChecklistItemTableViewCell.h */,
 				3FF649C8198F17F400D189CC /* ChecklistItemTableViewCell.m */,
 				3FB8CAB219C28BE100DA6C13 /* ChecklistItemIcons.plist */,
+				3F01D48A19DB99F4003360F9 /* ChecklistViewController.h */,
+				3F01D48B19DB99F4003360F9 /* ChecklistViewController.m */,
 			);
 			name = Checklist;
 			sourceTree = "<group>";
@@ -188,6 +206,7 @@
 		3FF6498C198D7EB400D189CC /* MissionCriticalChecklist */ = {
 			isa = PBXGroup;
 			children = (
+				3F01D48D19E45BC0003360F9 /* ChecklistHistory */,
 				3FF64995198D7EB400D189CC /* AppDelegate.h */,
 				3FF64996198D7EB400D189CC /* AppDelegate.m */,
 				3FF6499B198D7EB400D189CC /* Images.xcassets */,
@@ -347,6 +366,8 @@
 				3FAAC5EE19A9205B00EC4046 /* AddChecklistViewController.m in Sources */,
 				3FF649C9198F17F400D189CC /* ChecklistItemTableViewCell.m in Sources */,
 				3F0417C819B7F6150082FD0B /* UITextFieldOrdered.m in Sources */,
+				3F01D48C19DB99F4003360F9 /* ChecklistViewController.m in Sources */,
+				3F01D48919DB6555003360F9 /* ChecklistCollectionViewController.m in Sources */,
 				3FF649BE198D88B700D189CC /* ChecklistItem.m in Sources */,
 				3FF64997198D7EB400D189CC /* AppDelegate.m in Sources */,
 				3FF64993198D7EB400D189CC /* main.m in Sources */,
@@ -566,6 +587,7 @@
 		3FF64998198D7EB400D189CC /* MissionCriticalChecklist.xcdatamodeld */ = {
 			isa = XCVersionGroup;
 			children = (
+				3F01D48E19E45C2F003360F9 /* MissionCriticalChecklist 2.xcdatamodel */,
 				3FF64999198D7EB400D189CC /* MissionCriticalChecklist.xcdatamodel */,
 			);
 			currentVersion = 3FF64999198D7EB400D189CC /* MissionCriticalChecklist.xcdatamodel */;

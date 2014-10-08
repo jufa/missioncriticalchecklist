@@ -15,6 +15,9 @@
     self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
     if (self) {
         // Initialization code
+        UIView *bgView = [[UIView alloc] init];
+        [bgView setBackgroundColor:[UIColor redColor]];
+        [self setSelectedBackgroundView: bgView];
     }
     return self;
 }

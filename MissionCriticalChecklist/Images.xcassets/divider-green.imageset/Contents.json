@@ -3,11 +3,12 @@
     {
       "idiom" : "universal",
       "scale" : "1x",
-      "filename" : "basecircle.png"
+      "filename" : "divider-green@1x.png"
     },
     {
       "idiom" : "universal",
-      "scale" : "2x"
+      "scale" : "2x",
+      "filename" : "divider-green@2x.png"
     },
     {
       "idiom" : "universal",

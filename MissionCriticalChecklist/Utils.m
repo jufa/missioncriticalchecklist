@@ -65,5 +65,13 @@
     }
 }
 
++ (int)getTotalRows:(UITableView *)tableView {
+    int r = 0;
+    int sMax = [tableView numberOfSections];
+    for(int section = 0; section < sMax; section++){
+        r = r + [tableView numberOfRowsInSection:section];
+    }
+    return r;
+}
 
 @end

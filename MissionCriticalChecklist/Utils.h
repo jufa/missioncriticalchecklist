@@ -10,4 +10,5 @@
 
 @interface Utils : NSObject
 + (CGFloat)measureHeightOfUITextView:(UITextView *)textView;
++ (int)getTotalRows:(UITableView*)tableView;
 @end
