@@ -32,6 +32,7 @@
     // Configure the view for the selected state
     //enable the check swith:
     self.check.enabled = selected;
+    self.checkLeft.enabled = selected;
     
 }
 
@@ -42,14 +43,17 @@
 
 -(void) editingModeStart {
     [self.check setHidden:YES];
+    [self.checkLeft setHidden:YES];
 }
 
 -(void) editingModeEnd {
     [self.check setHidden:NO];
+    [self.checkLeft setHidden:NO];
 }
 
 -(void) reset {
     [self.check setOn: NO];
+    [self.checkLeft setOn: NO];
 }
 
 -(void) setTimestamp:(NSDate*)date {

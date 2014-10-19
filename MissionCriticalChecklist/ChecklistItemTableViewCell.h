@@ -13,6 +13,7 @@
 @property (weak, nonatomic) IBOutlet UITextField *actionTextField;
 @property (weak, nonatomic) IBOutlet UITextView *detailTextField;
 @property (weak, nonatomic) IBOutlet UISwitch *check;
+@property (weak, nonatomic) IBOutlet UISwitch *checkLeft;
 @property (weak, nonatomic) IBOutlet UITextField *timeStamp;
 @property NSInteger index;
 @property (weak, nonatomic) IBOutlet UIImageView *icon;

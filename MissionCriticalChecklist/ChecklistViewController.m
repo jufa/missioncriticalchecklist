@@ -143,6 +143,9 @@
 {
     [super viewDidLoad];
     
+    //rotation notification. TODO: remove this list
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didRotate:) name:UIDeviceOrientationDidChangeNotification object:nil];
+    
     //allow row seletion in editing mode:
     self.tableView.allowsSelectionDuringEditing = YES;
     
@@ -158,6 +161,11 @@
     
     [self refreshInterface];
     
+}
+
+-(void) viewDidDisappear:(BOOL)animated {
+    //clean up notification callbacks:
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:UIDeviceOrientationDidChangeNotification object:nil];
 }
 
 - (void)didReceiveMemoryWarning
@@ -198,6 +206,7 @@
     
     //switch:
     [cell.check setOn:checklistItem.checked.boolValue animated:NO];
+    [cell.checkLeft setOn:checklistItem.checked.boolValue animated:NO];
     [cell setTimestamp:checklistItem.timestamp];
     
     //image:
@@ -208,6 +217,11 @@
 }
 
 #pragma mark - User interaction
+- (IBAction)checklistsClick:(id)sender {
+    //get a ref to the parent navigator and pop me off the view stack:
+    UINavigationController *navController = self.navigationController;
+    [navController popViewControllerAnimated:YES];
+}
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
@@ -404,7 +418,8 @@
             ChecklistItemTableViewCell  *cell = (ChecklistItemTableViewCell*) [tableView cellForRowAtIndexPath:indexPath];
             cell.actionTextField.text = cli.action;
             cell.detailTextField.text = cli.detail;
-            [cell.check setOn: cli.checked.boolValue];
+            [cell.check setOn: cli.checked.boolValue animated:YES];
+            [cell.checkLeft setOn: cli.checked.boolValue animated:YES];
             [cell setTimestamp:cli.timestamp];
         }
             break;
@@ -502,6 +517,22 @@
     
 }
 
+#pragma mark - Rotation detection
+
+//NOT CALLED:
+/*
+- (void) didRotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration {
+    [super willRotateToInterfaceOrientation: toInterfaceOrientation duration: duration];
+    [self refreshInterface];
+}
+ */
+
+//so this is used as specified in viewDidLoad.
+// See: http://programming.mvergel.com/2012/11/ios-didrotatefrominterfaceorientation.html#.VEHf-yldVro
+-(void) didRotate:(NSNotification *)notification  {
+    [self refreshInterface];
+}
+
 - (void) refreshInterface {
     [self updateFooter];
     //TODO: more may be added later
@@ -522,45 +553,38 @@
         }
     }
     
+    //load appropriate bar image:
+    NSString *imageName;
+    if(totalItems == checkedItems) {
+        imageName = @"divider-green.png";
+        self.checklistComplete = YES;
+    } else {
+        imageName = @"divider-grey.png";
+        if(self.checklistComplete){
+            self.checklistComplete = NO;
+        }
+        
+    }
+    self.footerImageLeft.image = [UIImage imageNamed:imageName];
+    self.footerImageRight.image = [UIImage imageNamed:imageName];
+    
+    
+    //translate fraction complete to x frame offset for progress indicator:
+    
+    float offset = (float)checkedItems/(float)totalItems;
+    CGRect newFrame = self.footerImageLeft.frame;
+    newFrame.origin.x = offset * self.view.frame.size.width - self.view.frame.size.width;
+    newFrame.size.width = self.view.frame.size.width + 16.0; //32 is for the 16 point overflow needed on either side of the parent view controller
+    newFrame.size.height = 30.0;
+    self.footerImageLeft.frame = newFrame;
+    
+    
     // convert to percent and so on
     // update footer text:
     NSString *footerString;
     footerString = [NSString stringWithFormat:@"%d / %d items completed", checkedItems, totalItems];
     self.footerTextField.text = footerString;
-    //update footer diagonal stripes:
-    NSString *imageName;
-    if(totalItems == checkedItems) {
-        imageName = @"divider-green.png";
-        //smooth scoll up to reveal extra buttons:
-        /*
-         [self.view layoutIfNeeded];
-        self.footerConstraintBottomSpace.constant = -60;
-        self.tableViewConstraintBottomSpace.constant = 300;
-
-        [UIView animateWithDuration:0.5f
-                         animations:^{
-                             [self.view layoutIfNeeded]; // Called on parent view
-                         }];
-         */
-        self.checklistComplete = YES;
-    } else {
-        imageName = @"divider-yellow.png";
-        if(self.checklistComplete){
-            /*
-            [self.view layoutIfNeeded];
-            self.footerConstraintBottomSpace.constant = -60;
-            self.tableViewConstraintBottomSpace.constant = 60;
-            [UIView animateWithDuration:0.5f
-                             animations:^{
-                                 [self.view layoutIfNeeded]; // Called on parent view
-                             }];
-            */
-            self.checklistComplete = NO;
-        }
-
-    }
-    self.footerImageLeft.image = [UIImage imageNamed:imageName];
-    self.footerImageRight.image = [UIImage imageNamed:imageName];
+    
     
 }
 #pragma mark - NextChecklist
