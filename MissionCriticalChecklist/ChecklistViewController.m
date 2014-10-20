@@ -8,6 +8,11 @@
 
 #import "ChecklistViewController.h"
 
+#define PB_WIDTH 1048.0
+#define PB_HEIGHT 30.0
+#define PB_OFFSETX 165.0
+
+
 
 @interface ChecklistViewController ()
 
@@ -143,7 +148,7 @@
 {
     [super viewDidLoad];
     
-    //rotation notification. TODO: remove this list
+    //rotation notification.
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didRotate:) name:UIDeviceOrientationDidChangeNotification object:nil];
     
     //allow row seletion in editing mode:
@@ -322,7 +327,9 @@
     UIButton* btn = (UIButton *)sender;
     if(self.tableView.isEditing){
         
-        [btn setTitle:@"Edit" forState:UIControlStateNormal];
+        //[btn setTitle:@"Edit" forState:UIControlStateNormal];
+        [btn setImage:[UIImage imageNamed:@"ico-edit.png"] forState:UIControlStateNormal];
+        
         //end editing and commit changes:
         [self.tableView setEditing:NO animated:YES];
         
@@ -361,7 +368,8 @@
         
     } else {
         self.inReorderingOperation = NO;
-        [btn setTitle:@"Done Editing" forState:UIControlStateNormal];
+        //[btn setTitle:@"Done Editing" forState:UIControlStateNormal];
+        [btn setImage:[UIImage imageNamed:@"ico-editdone.png"] forState:UIControlStateNormal];
         [self.tableView setEditing:YES animated:YES];
         
         
@@ -519,14 +527,6 @@
 
 #pragma mark - Rotation detection
 
-//NOT CALLED:
-/*
-- (void) didRotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration {
-    [super willRotateToInterfaceOrientation: toInterfaceOrientation duration: duration];
-    [self refreshInterface];
-}
- */
-
 //so this is used as specified in viewDidLoad.
 // See: http://programming.mvergel.com/2012/11/ios-didrotatefrominterfaceorientation.html#.VEHf-yldVro
 -(void) didRotate:(NSNotification *)notification  {
@@ -565,24 +565,24 @@
         }
         
     }
-    self.footerImageLeft.image = [UIImage imageNamed:imageName];
-    self.footerImageRight.image = [UIImage imageNamed:imageName];
+    //self.footerImageLeft.image = [UIImage imageNamed:imageName];
+    //self.footerImageRight.image = [UIImage imageNamed:imageName];
     
     
     //translate fraction complete to x frame offset for progress indicator:
     
     float offset = (float)checkedItems/(float)totalItems;
     CGRect newFrame = self.footerImageLeft.frame;
-    newFrame.origin.x = offset * self.view.frame.size.width - self.view.frame.size.width;
-    newFrame.size.width = self.view.frame.size.width + 16.0; //32 is for the 16 point overflow needed on either side of the parent view controller
-    newFrame.size.height = 30.0;
+    newFrame.origin.x = offset * (self.view.frame.size.width - PB_OFFSETX) - PB_WIDTH;
+    newFrame.size.width = PB_WIDTH;
+    newFrame.size.height = PB_HEIGHT;
     self.footerImageLeft.frame = newFrame;
     
     
     // convert to percent and so on
     // update footer text:
     NSString *footerString;
-    footerString = [NSString stringWithFormat:@"%d / %d items completed", checkedItems, totalItems];
+    footerString = [NSString stringWithFormat:@"%d / %d completed", checkedItems, totalItems];
     self.footerTextField.text = footerString;
     
     

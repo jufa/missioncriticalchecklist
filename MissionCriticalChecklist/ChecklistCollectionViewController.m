@@ -291,7 +291,9 @@
     UIButton* btn = (UIButton *)sender;
     if(self.tableView.isEditing){
         
-        [btn setTitle:@"Edit" forState:UIControlStateNormal];
+        //[btn setTitle:@"Edit" forState:UIControlStateNormal];
+        [btn setImage:[UIImage imageNamed:@"ico-edit.png"] forState:UIControlStateNormal];
+
         //end editing and commit changes:
         [self.tableView setEditing:NO animated:YES];
         
@@ -330,9 +332,11 @@
         
     } else {
         self.inReorderingOperation = NO;
-        [btn setTitle:@"Done Editing" forState:UIControlStateNormal];
+        //[btn setTitle:@"Done Editing" forState:UIControlStateNormal];
+        [btn setImage:[UIImage imageNamed:@"ico-editdone.png"] forState:UIControlStateNormal];
+
         [self.tableView setEditing:YES animated:YES];
-        
+        /*
         //set all cells into editing mode:
         NSMutableArray *cells = [[NSMutableArray alloc] init];
         for (NSInteger j = 0; j < [self.tableView numberOfSections]; ++j)
@@ -342,11 +346,12 @@
                 [cells addObject:[self.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:i inSection:j]]];
             }
         }
+        
         for (ChecklistCollectionTableViewCell *cell in cells)
         {
             [cell editingModeStart];
         }
-        
+        */
         
         
     }
