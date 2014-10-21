@@ -19,6 +19,8 @@
 @property BOOL inReorderingOperation;
 @property ChecklistItem* checklistItemToEdit;
 @property BOOL checklistComplete;
+@property ChecklistItemTableViewCell* selectedCell;
+@property NSIndexPath* selectedRow;
 
 @end
 
@@ -47,7 +49,7 @@
 
 #pragma mark -
 #pragma mark  Add checklist item view controller delegate implementation
--(void) addChecklistItemViewControllerDidCancel:(ChecklistItem *)checklistItemToDelete{
+-(void) addChecklistItemViewControllerDidCancel:(ChecklistItem *)checklistItemToDelete {
     if(!self.tableView.isEditing){
         //delete managed object
         [self.managedObjectContext deleteObject:checklistItemToDelete];
@@ -55,7 +57,7 @@
     [self dismissViewControllerAnimated:YES completion:nil];
 }
 
--(void) addChecklistItemViewControllerDidSave:(ChecklistItem *)checklistItemToSave{
+-(void) addChecklistItemViewControllerDidSave:(ChecklistItem *)checklistItemToSave {
     
     if(!self.tableView.isEditing){
         //assign the new items index based on last hilited cell and reflow  index values below it:
@@ -162,13 +164,15 @@
     
     iconArray = ChecklistItemIcons.iconList;
     
+    self.selectedRow = nil;
+    
     self.checklistComplete = YES; //init;
     
     [self refreshInterface];
-    
 }
 
--(void) viewDidDisappear:(BOOL)animated {
+-(void) viewDidDisappear:(BOOL)animated
+{
     //clean up notification callbacks:
     [[NSNotificationCenter defaultCenter] removeObserver:self name:UIDeviceOrientationDidChangeNotification object:nil];
 }
@@ -199,9 +203,9 @@
     return [self getNumberOfRowsInSection:section];
 }
 
-
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    
     ChecklistItemTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier: @"Cell" forIndexPath:indexPath];
     
     // Configure the cell...
@@ -217,9 +221,25 @@
     //image:
     NSString *imageToLoad = [NSString stringWithFormat:@"%@.png", checklistItem.icon];
     cell.icon.image = [UIImage imageNamed:imageToLoad];
+
+    //backgrounds:
+    if(checklistItem.checked.boolValue == YES) [cell setMode:@"complete"];
+    if(checklistItem.checked.boolValue == NO) [cell setMode:@"incomplete"];
     
+    //not selected? cannot check off:
+    int a =indexPath.row;
+    int b = self.selectedRow.row;
+    
+    if (indexPath.row == self.selectedRow.row && self.selectedRow != nil) {
+        cell.checkButtonRight.enabled = YES;
+        cell.checkButtonLeft.enabled = YES;
+    } else {
+        cell.checkButtonRight.enabled = NO;
+        cell.checkButtonLeft.enabled = NO;
+    }
     return cell;
 }
+
 
 #pragma mark - User interaction
 - (IBAction)checklistsClick:(id)sender {
@@ -231,6 +251,10 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     
+    ChecklistItemTableViewCell* cell = (ChecklistItemTableViewCell*)[self.tableView cellForRowAtIndexPath:indexPath];
+    
+    ChecklistItemTableViewCell* prevCell = (ChecklistItemTableViewCell*)[self.tableView cellForRowAtIndexPath:self.selectedRow];
+    
     //check if in edit mode:
     if(self.tableView.isEditing){
         
@@ -241,10 +265,20 @@
         [self performSegueWithIdentifier: @"editChecklistItemDetails" sender: self];
         
     } else {
-        ;
         
+        //make sure to do this first, as the user may select the same cell!
+        if(prevCell){
+            prevCell.checkButtonRight.enabled = NO;
+            prevCell.checkButtonLeft.enabled = NO;
+        }
+        
+        cell.checkButtonRight.enabled = YES;
+        cell.checkButtonLeft.enabled = YES;
+        
+        //[self.tableView deselectRowAtIndexPath:[self.tableView indexPathForSelectedRow] animated:NO];
+        self.selectedCell = cell;
+        self.selectedRow = indexPath;
     }
-    
 }
 
 
@@ -429,6 +463,10 @@
             [cell.check setOn: cli.checked.boolValue animated:YES];
             [cell.checkLeft setOn: cli.checked.boolValue animated:YES];
             [cell setTimestamp:cli.timestamp];
+            
+            //cell background:
+            if(cli.checked.boolValue == YES) [cell setMode:@"complete"];
+            if(cli.checked.boolValue == NO) [cell setMode:@"incomplete"];
         }
             break;
             
@@ -511,6 +549,7 @@
     NSError *error;
     [self.managedObjectContext save:&error];
     
+    //TODO: how much of the following should be moved into the fetchedResultsController's change callback block?
     
     //hilite next task item, scroll the view:
     NSIndexPath *currRow = self.tableView.indexPathForSelectedRow;
@@ -519,10 +558,52 @@
         //NSLog(@"newIndexPath: %@", newIndexPath);
         [self.tableView selectRowAtIndexPath:nextRow animated:YES scrollPosition:UITableViewScrollPositionMiddle];
     }
-    
+
     //update footer:
     [self refreshInterface];
     
+}
+
+-(IBAction)clicked:(id)sender {
+    NSIndexPath *indexPath = [self.tableView indexPathForSelectedRow];
+    /* this is just silly, fortunately not needed.
+    UIButton* btn = (UIButton*)sender;
+    CGPoint center = btn.center;
+    CGPoint rootViewPoint = [btn.superview convertPoint:center toView:self.tableView];
+    NSIndexPath *indexPathOfButton = [self.tableView indexPathForRowAtPoint:rootViewPoint];
+    
+    //if(indexPath != indexPathOfButton) return;
+    */
+    //ok, so now we know the index of the checked item, lets  update that in the managed object
+    ChecklistItem* cli = [[_fetchedResultsController fetchedObjects] objectAtIndex:indexPath.row];
+    
+    //change the switch setting
+    //cli.checked = [NSNumber numberWithBool:sw.isOn];
+    cli.checked = [NSNumber numberWithBool:!cli.checked.boolValue];
+    
+    cli.timestamp = [NSDate date];
+    
+    //and resave the whole managed object context:
+    NSError *error;
+    [self.managedObjectContext save:&error];
+    
+    //TODO: how much of the following should be moved into the fetchedResultsController's change callback block?
+    
+    //hilite next task item, scroll the view:
+    NSIndexPath *currRow = self.tableView.indexPathForSelectedRow;
+    if(currRow.row < [Utils getTotalRows:self.tableView] - 1 ) {
+        NSIndexPath *nextRow = [NSIndexPath  indexPathForRow:currRow.row + 1 inSection:currRow.section];
+        //NSLog(@"newIndexPath: %@", newIndexPath);
+        [self.tableView selectRowAtIndexPath:nextRow animated:YES scrollPosition:UITableViewScrollPositionMiddle];
+        //call event handler manually, since it is not called automatically:
+        //self.selectedRow = nextRow;
+        [self tableView:self.tableView didSelectRowAtIndexPath:nextRow];
+        
+    }
+    
+    //update footer:
+    [self refreshInterface];
+
 }
 
 #pragma mark - Rotation detection
@@ -584,9 +665,8 @@
     NSString *footerString;
     footerString = [NSString stringWithFormat:@"%d / %d completed", checkedItems, totalItems];
     self.footerTextField.text = footerString;
-    
-    
 }
+
 #pragma mark - NextChecklist
 - (IBAction)nextChecklist:(id)sender {
     

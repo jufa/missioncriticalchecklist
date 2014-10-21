@@ -210,7 +210,6 @@
 }
 
 
-
 /*
  -(NSString*)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section {
  return [[[self.fetchedResultsController sections] objectAtIndex:section] action];
@@ -232,17 +231,10 @@
     if (editingStyle == UITableViewCellEditingStyleDelete) {
         // Delete the row from the data source
         
-        //not this:
-        //[tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
-        
-        //delete from managed object instead:
-        
         Checklist* checklist = (Checklist*)[self.fetchedResultsController objectAtIndexPath:indexPath];
         [self.managedObjectContext deleteObject:checklist];
         
         //now expect the FRC to trigger methods to allow table update.
-        
-        
         
     } else if (editingStyle == UITableViewCellEditingStyleInsert) {
         // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
@@ -310,23 +302,6 @@
         {
             // Handle error
         }
-        
-        /*
-        //set all cells into editing mode:
-        NSMutableArray *cells = [[NSMutableArray alloc] init];
-        for (NSInteger j = 0; j < [self.tableView numberOfSections]; ++j)
-        {
-            for (NSInteger i = 0; i < [self.tableView numberOfRowsInSection:j]; ++i)
-            {
-                [cells addObject:[self.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:i inSection:j]]];
-            }
-        }
-        for (ChecklistCollectionTableViewCell *cell in cells)
-        {
-            [cell editingModeEnd];
-        }
-         */
-        
         
         [self.tableView reloadData]; //debug
         
@@ -416,7 +391,6 @@
                 //[tableView insertRowsAtIndexPaths:[NSArray arrayWithObject:newIndexPath] withRowAnimation:UITableViewRowAnimationFade];
             }
             break;
-            
     }
     
 }
@@ -452,8 +426,8 @@
 }
 
 
-#pragma mark -
 #pragma mark ChecklistCell section
+
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
@@ -464,36 +438,6 @@
      }
      */
     return 96;
-}
-
-
-
-- (IBAction)checkedOff:(id)sender {
-    
-    //what switch? get reference so we can determine state.
-    UISwitch *sw = (UISwitch *)sender;
-    
-    //how weird is this?! We need the index of the switch:
-    //see : http://stackoverflow.com/questions/23265291/access-uiswitch-in-prototype-cell
-    
-    //CGPoint pointInTable = [sw convertPoint:sw.bounds.origin toView:self.tableView];
-    //NSIndexPath *indexPath = [self.tableView indexPathForRowAtPoint:pointInTable];
-    
-    //alternatively we can just grab the selected row, since the row has to have been selected in order to toggle the switch.
-    NSIndexPath *indexPath = [self.tableView indexPathForSelectedRow];
-    
-    //ok, so now we know the index of the checked item, lets  update that in the managed object
-    Checklist* cli = [[_fetchedResultsController fetchedObjects] objectAtIndex:indexPath.row];
-    
-    //change the switch setting
-    //cli.checked = [NSNumber numberWithBool:sw.isOn];
-    
-    //cli.timestamp = [NSDate date];
-    
-    //and resave the whole managed object context:
-    NSError *error;
-    [self.managedObjectContext save:&error];
-    
 }
 
 /*

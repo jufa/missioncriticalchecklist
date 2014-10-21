@@ -29,7 +29,6 @@
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *tableViewConstraintBottomSpace;
 @property (weak, nonatomic) IBOutlet UIButton *nextChecklistButton;
 
-
 @property (nonatomic,strong) NSFetchedResultsController *fetchedResultsController;
 - (IBAction)beginEdit:(id)sender;
 - (IBAction)resetChecklist:(id)sender;

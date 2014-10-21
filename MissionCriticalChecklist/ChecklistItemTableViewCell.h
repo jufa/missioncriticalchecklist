@@ -17,12 +17,17 @@
 @property (weak, nonatomic) IBOutlet UITextField *timeStamp;
 @property NSInteger index;
 @property (weak, nonatomic) IBOutlet UIImageView *icon;
+@property (weak, nonatomic) IBOutlet UIImageView *backgroundLeft;
+@property (weak, nonatomic) IBOutlet UIImageView *backgroundRight;
 - (IBAction)checkToggled:(id)sender;
 -(void)editingModeStart;
 -(void)editingModeEnd;
 -(void)reset;
 -(void)setTimestamp:(NSDate *)date;
 -(void)setDetailText:(NSString*)text;
+-(void)setMode:(NSString*)mode;
+@property (weak, nonatomic) IBOutlet UIButton *checkButtonRight;
+@property (weak, nonatomic) IBOutlet UIButton *checkButtonLeft;
 
 @end
 

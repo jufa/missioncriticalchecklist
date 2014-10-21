@@ -36,6 +36,24 @@
     
 }
 
+-(void) setMode:(NSString*)mode {
+    NSString* suffix;
+    
+    if ([mode isEqualToString:@"incomplete"]) {
+        suffix = @"grey";
+    } else if ([mode isEqualToString:@"complete"]) {
+        suffix = @"green";
+    } else if ([mode isEqualToString:@"skipped"]) {
+        suffix = @"blue";
+    }
+        
+    //set left and right switch background images:
+    self.backgroundLeft.image = [UIImage imageNamed: [NSString stringWithFormat:@"cli-bg-left-%@", suffix]];
+    
+    self.backgroundRight.image = [UIImage imageNamed: [NSString stringWithFormat:@"cli-bg-right-%@", suffix]];
+    
+}
+
 -(void) setDetailText:(NSString*)text{
     self.detailTextField.text = text;
 }
@@ -62,7 +80,6 @@
     NSString *stringFromDate = [formatter stringFromDate:date];
     self.timeStamp.text = stringFromDate;
 }
-
 
 - (IBAction)checkToggled:(id)sender {
 }

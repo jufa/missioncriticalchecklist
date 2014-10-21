@@ -19,6 +19,7 @@
 		3FB8CAB619C295A100DA6C13 /* UICollectionViewCellWithImage.m in Sources */ = {isa = PBXBuildFile; fileRef = 3FB8CAB519C295A100DA6C13 /* UICollectionViewCellWithImage.m */; };
 		3FB8CAB919C4839000DA6C13 /* ChecklistItemIcons.m in Sources */ = {isa = PBXBuildFile; fileRef = 3FB8CAB819C4839000DA6C13 /* ChecklistItemIcons.m */; };
 		3FB8CABC19C4D03F00DA6C13 /* Utils.m in Sources */ = {isa = PBXBuildFile; fileRef = 3FB8CABB19C4D03F00DA6C13 /* Utils.m */; };
+		3FEC046719F57E2800E7AB48 /* ImportExport.m in Sources */ = {isa = PBXBuildFile; fileRef = 3FEC046619F57E2800E7AB48 /* ImportExport.m */; };
 		3FF64985198D7EB400D189CC /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3FF64984198D7EB400D189CC /* Foundation.framework */; };
 		3FF64987198D7EB400D189CC /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3FF64986198D7EB400D189CC /* CoreGraphics.framework */; };
 		3FF64989198D7EB400D189CC /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3FF64988198D7EB400D189CC /* UIKit.framework */; };
@@ -75,6 +76,8 @@
 		3FB8CAB819C4839000DA6C13 /* ChecklistItemIcons.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ChecklistItemIcons.m; sourceTree = "<group>"; };
 		3FB8CABA19C4D03F00DA6C13 /* Utils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Utils.h; sourceTree = "<group>"; };
 		3FB8CABB19C4D03F00DA6C13 /* Utils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Utils.m; sourceTree = "<group>"; };
+		3FEC046619F57E2800E7AB48 /* ImportExport.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ImportExport.m; sourceTree = "<group>"; };
+		3FEC046819F585B300E7AB48 /* ImportExport.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ImportExport.h; sourceTree = "<group>"; };
 		3FF64981198D7EB400D189CC /* MissionCriticalChecklist.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MissionCriticalChecklist.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		3FF64984198D7EB400D189CC /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		3FF64986198D7EB400D189CC /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
@@ -172,6 +175,15 @@
 			name = Checklist;
 			sourceTree = "<group>";
 		};
+		3FEC046319F5798400E7AB48 /* ImportExport */ = {
+			isa = PBXGroup;
+			children = (
+				3FEC046819F585B300E7AB48 /* ImportExport.h */,
+				3FEC046619F57E2800E7AB48 /* ImportExport.m */,
+			);
+			name = ImportExport;
+			sourceTree = "<group>";
+		};
 		3FF64978198D7EB400D189CC = {
 			isa = PBXGroup;
 			children = (
@@ -206,6 +218,7 @@
 		3FF6498C198D7EB400D189CC /* MissionCriticalChecklist */ = {
 			isa = PBXGroup;
 			children = (
+				3FEC046319F5798400E7AB48 /* ImportExport */,
 				3F01D48D19E45BC0003360F9 /* ChecklistHistory */,
 				3FF64995198D7EB400D189CC /* AppDelegate.h */,
 				3FF64996198D7EB400D189CC /* AppDelegate.m */,
@@ -359,6 +372,7 @@
 				3FAE270719A5611C00B4E2B5 /* ChecklistCollectionTableViewCell.m in Sources */,
 				3FAE270419A42C9A00B4E2B5 /* ChecklistCollectionTableViewController.m in Sources */,
 				3FB8CABC19C4D03F00DA6C13 /* Utils.m in Sources */,
+				3FEC046719F57E2800E7AB48 /* ImportExport.m in Sources */,
 				3FB8CAB919C4839000DA6C13 /* ChecklistItemIcons.m in Sources */,
 				3FF6499A198D7EB400D189CC /* MissionCriticalChecklist.xcdatamodeld in Sources */,
 				3FAAC5F119AE798300EC4046 /* Checklist.m in Sources */,
