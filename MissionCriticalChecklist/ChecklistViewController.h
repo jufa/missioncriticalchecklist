@@ -28,6 +28,9 @@
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *footerConstraintBottomSpace;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *tableViewConstraintBottomSpace;
 @property (weak, nonatomic) IBOutlet UIButton *nextChecklistButton;
+@property (weak, nonatomic) IBOutlet UILabel *checklistNameLabel;
+@property (weak, nonatomic) IBOutlet UILabel *checklistTypeLabel;
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *progressBarOffset;
 
 @property (nonatomic,strong) NSFetchedResultsController *fetchedResultsController;
 - (IBAction)beginEdit:(id)sender;

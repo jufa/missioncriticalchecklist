@@ -3,17 +3,17 @@
     {
       "idiom" : "universal",
       "scale" : "1x",
-      "filename" : "progress-green.png"
+      "filename" : "progress-yellow.png"
     },
     {
       "idiom" : "universal",
       "scale" : "2x",
-      "filename" : "progress-green@2x.png"
+      "filename" : "progress-yellow@2x.png"
     },
     {
       "idiom" : "universal",
       "scale" : "3x",
-      "filename" : "progress-green@3x.png"
+      "filename" : "progress-yellow@3x.png"
     }
   ],
   "info" : {

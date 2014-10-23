@@ -35,15 +35,15 @@
     _typeField.text = [self.currentChecklist type];
     _nameField.text = [self.currentChecklist name];
     if ([self.mode isEqual: @"edit"]) {
-        self.navTitle.title = @"Edit Checklist";
+        self.titleLabel.text = @"Edit Checklist";
         _typeField.clearsOnBeginEditing = NO;
         _nameField.clearsOnBeginEditing = NO;
     } else if ([self.mode isEqual: @"add"]) {
-        self.navTitle.title = @"Add Checklist";
+        self.titleLabel.text = @"Add Checklist";
         _typeField.clearsOnBeginEditing = YES;
         _nameField.clearsOnBeginEditing = YES;
     } else {
-        self.navTitle.title = @"Add or Edit Checklist";
+        self.titleLabel.text = @"Add or Edit Checklist";
     }
     
     iconArray = ChecklistItemIcons.iconList;

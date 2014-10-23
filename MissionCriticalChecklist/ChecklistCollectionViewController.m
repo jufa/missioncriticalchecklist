@@ -84,7 +84,6 @@
         newChecklist.index = [NSNumber numberWithInt:insertionIndex];
         acvc.currentChecklist = newChecklist;
         acvc.mode = @"add";
-        //acvc.navigationController.navigationBar.topItem.title = @"Create New Checklist";
     }
     //segue for modal to edit selected checklist name and type:
     if( [[segue identifier] isEqualToString:@"editChecklistDetails"]) {
@@ -93,7 +92,6 @@
         acvc.delegate = self;
         acvc.currentChecklist = self.checklistToEdit;
         acvc.mode = @"edit";
-        acvc.navigationController.navigationBar.topItem.title = @"Edit Checklist Details";
     }
     
     //segue to show a checklist:

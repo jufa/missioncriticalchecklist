@@ -10,7 +10,8 @@
 
 #define PB_WIDTH 1048.0
 #define PB_HEIGHT 30.0
-#define PB_OFFSETX 165.0
+#define PB_OFFSETX (1048.0-916.0)
+#define PB_TEXTAREAWIDTH (1048.0-916.0)
 
 
 
@@ -168,7 +169,6 @@
     
     self.checklistComplete = YES; //init;
     
-    [self refreshInterface];
 }
 
 -(void) viewDidDisappear:(BOOL)animated
@@ -176,6 +176,14 @@
     //clean up notification callbacks:
     [[NSNotificationCenter defaultCenter] removeObserver:self name:UIDeviceOrientationDidChangeNotification object:nil];
 }
+
+
+//called after initial load of subviews. Now we can layout anything we need to programmatically
+- (void)viewDidLayoutSubviews
+{
+    [self refreshInterface];
+}
+
 
 - (void)didReceiveMemoryWarning
 {
@@ -205,40 +213,17 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    
     ChecklistItemTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier: @"Cell" forIndexPath:indexPath];
-    
-    // Configure the cell...
     ChecklistItem *checklistItem = [self.fetchedResultsController objectAtIndexPath:indexPath];
-    cell.actionTextField.text = checklistItem.action;
-    [cell setDetailText:checklistItem.detail];
-    
-    //switch:
-    [cell.check setOn:checklistItem.checked.boolValue animated:NO];
-    [cell.checkLeft setOn:checklistItem.checked.boolValue animated:NO];
-    [cell setTimestamp:checklistItem.timestamp];
-    
-    //image:
-    NSString *imageToLoad = [NSString stringWithFormat:@"%@.png", checklistItem.icon];
-    cell.icon.image = [UIImage imageNamed:imageToLoad];
-
-    //backgrounds:
-    if(checklistItem.checked.boolValue == YES) [cell setMode:@"complete"];
-    if(checklistItem.checked.boolValue == NO) [cell setMode:@"incomplete"];
-    
-    //not selected? cannot check off:
-    int a =indexPath.row;
-    int b = self.selectedRow.row;
-    
-    if (indexPath.row == self.selectedRow.row && self.selectedRow != nil) {
-        cell.checkButtonRight.enabled = YES;
-        cell.checkButtonLeft.enabled = YES;
+    [cell updateWithData:checklistItem];
+    if( self.selectedRow.row == indexPath.row && self.selectedRow != nil){
+        [cell selected:YES];
     } else {
-        cell.checkButtonRight.enabled = NO;
-        cell.checkButtonLeft.enabled = NO;
+        [cell selected:NO];
     }
     return cell;
 }
+
 
 
 #pragma mark - User interaction
@@ -268,12 +253,9 @@
         
         //make sure to do this first, as the user may select the same cell!
         if(prevCell){
-            prevCell.checkButtonRight.enabled = NO;
-            prevCell.checkButtonLeft.enabled = NO;
+            [prevCell selected: NO];
         }
-        
-        cell.checkButtonRight.enabled = YES;
-        cell.checkButtonLeft.enabled = YES;
+        [cell selected:YES];
         
         //[self.tableView deselectRowAtIndexPath:[self.tableView indexPathForSelectedRow] animated:NO];
         self.selectedCell = cell;
@@ -306,12 +288,9 @@
         //[tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
         
         ChecklistItem* checklistItem = (ChecklistItem*)[self.fetchedResultsController objectAtIndexPath:indexPath];
-        [self.managedObjectContext deleteObject:checklistItem];
+        [self.managedObjectContext deleteObject:checklistItem]; // we let the FRC callbacks handle tableview update.
         
         //now expect the FRC to trigger methods to allow table update.
-        
-        
-        
     } else if (editingStyle == UITableViewCellEditingStyleInsert) {
         // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
     }
@@ -334,7 +313,13 @@
  }
  */
 
+
+
+
+
 #pragma mark - Fetch Results Controller section
+
+
 -(NSFetchedResultsController*) fetchedResultsController {
     if (_fetchedResultsController != nil)  {
         [NSFetchedResultsController deleteCacheWithName:@"root"];
@@ -381,23 +366,6 @@
             // Handle error
         }
         
-        /* there is a bug here in that we are trying to talk to cells as if there is and equal number of cell objects as array elements - there is not since cells get reused.
-        //set all cells into editing mode:
-        NSMutableArray *cells = [[NSMutableArray alloc] init];
-        for (NSInteger j = 0; j < [self.tableView numberOfSections]; ++j)
-        {
-            for (NSInteger i = 0; i < [self.tableView numberOfRowsInSection:j]; ++i)
-            {
-                [cells addObject:[self.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:i inSection:j]]];
-            }
-        }
-        for (ChecklistItemTableViewCell *cell in cells)
-        {
-            [cell editingModeEnd];
-        }
-         */
-        
-        
         [self.tableView reloadData]; //debug
         
     } else {
@@ -405,34 +373,10 @@
         //[btn setTitle:@"Done Editing" forState:UIControlStateNormal];
         [btn setImage:[UIImage imageNamed:@"ico-editdone.png"] forState:UIControlStateNormal];
         [self.tableView setEditing:YES animated:YES];
-        
-        
-        
     }
 }
 
-- (IBAction)resetChecklist:(id)sender {
-    
-    
-    NSMutableArray *array = [[self.fetchedResultsController fetchedObjects] mutableCopy];
-    
-    
-    for (int i=0; i<[array count]; i++)
-    {
-        [(NSManagedObject *)[array objectAtIndex:i] setValue:[NSNumber numberWithBool:NO] forKey:@"checked"];
-        [(NSManagedObject *)[array objectAtIndex:i] setValue:nil forKey:@"timestamp"];
-    }
-    
-    
-    //and resave the whole managed object context:
-    NSError *error;
-    [self.managedObjectContext save:&error];
-    
-    [self.tableView reloadData];
-    [self refreshInterface];
-    
-    
-}
+
 
 -(void) controllerWillChangeContent:(NSFetchedResultsController *)controller{
     [self.tableView beginUpdates];
@@ -522,6 +466,28 @@
     
 }
 
+- (IBAction)resetChecklist:(id)sender {
+    
+    
+    NSMutableArray *array = [[self.fetchedResultsController fetchedObjects] mutableCopy];
+    
+    
+    for (int i=0; i<[array count]; i++)
+    {
+        [(NSManagedObject *)[array objectAtIndex:i] setValue:[NSNumber numberWithBool:NO] forKey:@"checked"];
+        [(NSManagedObject *)[array objectAtIndex:i] setValue:nil forKey:@"timestamp"];
+    }
+    
+    
+    //and resave the whole managed object context:
+    NSError *error;
+    [self.managedObjectContext save:&error];
+    
+    [self.tableView reloadData];
+    [self refreshInterface];
+    
+    
+}
 
 - (IBAction)checkedOff:(id)sender {
     
@@ -615,13 +581,23 @@
 }
 
 - (void) refreshInterface {
-    [self updateFooter];
+    self.checklistNameLabel.text = self.checklist.name;
+    self.checklistTypeLabel.text = self.checklist.type;
+    
+    [self updateProgress];
     //TODO: more may be added later
 }
 
+
+
 #pragma mark - Footer Management
 
-- (void) updateFooter {
+/**
+ *
+ * @brief refreshes the progress bar view for the checklist
+ *
+ */
+- (void) updateProgress {
     // find out how finished we are
     // go through all items
     int totalItems = [[_fetchedResultsController fetchedObjects] count];
@@ -637,33 +613,45 @@
     //load appropriate bar image:
     NSString *imageName;
     if(totalItems == checkedItems) {
-        imageName = @"divider-green.png";
+        imageName = @"progress-green";
         self.checklistComplete = YES;
     } else {
-        imageName = @"divider-grey.png";
+        imageName = @"progress-yellow";
         if(self.checklistComplete){
             self.checklistComplete = NO;
         }
-        
     }
-    //self.footerImageLeft.image = [UIImage imageNamed:imageName];
-    //self.footerImageRight.image = [UIImage imageNamed:imageName];
     
+    [self.footerImageLeft setImage:[UIImage imageNamed:imageName]];
+
     
     //translate fraction complete to x frame offset for progress indicator:
     
-    float offset = (float)checkedItems/(float)totalItems;
+    float offset = 0.0;
+    if(totalItems>0) {
+        offset = (float)checkedItems/(float)totalItems;
+    }
+    /*
     CGRect newFrame = self.footerImageLeft.frame;
-    newFrame.origin.x = offset * (self.view.frame.size.width - PB_OFFSETX) - PB_WIDTH;
+    newFrame.origin.x = offset * (self.view.frame.size.width - PB_TEXTAREAWIDTH) - PB_WIDTH;
     newFrame.size.width = PB_WIDTH;
     newFrame.size.height = PB_HEIGHT;
     self.footerImageLeft.frame = newFrame;
+    */
+    //[self.progressBarOffset setConstant: (1.0 - offset) * (self.view.frame.size.width - PB_TEXTAREAWIDTH) + PB_TEXTAREAWIDTH];
     
+    float target = (1.0 - offset) * (self.view.frame.size.width - PB_TEXTAREAWIDTH) + PB_TEXTAREAWIDTH;
+
+    [self.view layoutIfNeeded];
+    [UIView animateWithDuration:0.3
+                     animations:^{
+                         self.progressBarOffset.constant = target;
+                         [self.view layoutIfNeeded]; // Called on parent view
+                     }];
     
-    // convert to percent and so on
-    // update footer text:
+    // text update:
     NSString *footerString;
-    footerString = [NSString stringWithFormat:@"%d / %d completed", checkedItems, totalItems];
+    footerString = [NSString stringWithFormat:@"%d/%d COMPLETE", checkedItems, totalItems];
     self.footerTextField.text = footerString;
 }
 

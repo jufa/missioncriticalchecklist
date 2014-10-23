@@ -26,7 +26,7 @@
 @property (weak, nonatomic) IBOutlet UICollectionView *iconCollectionViewController;
 @property (strong,nonatomic) Checklist *currentChecklist;
 @property (strong, nonatomic) NSString *mode;
-
+@property (weak, nonatomic) IBOutlet UILabel *titleLabel;
 
 - (IBAction)cancel:(id)sender;
 - (IBAction)save:(id)sender;

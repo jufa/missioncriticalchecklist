@@ -25,6 +25,26 @@
     // Initialization code
 }
 
+-(void) updateWithData:(ChecklistItem *)checklistItem{
+    
+     // Configure the cell...
+     self.actionTextField.text = checklistItem.action;
+     [self setDetailText:checklistItem.detail];
+     
+     //switch:
+     //[cell.check setOn:checklistItem.checked.boolValue animated:NO];
+     //[cell.checkLeft setOn:checklistItem.checked.boolValue animated:NO];
+     [self setTimestamp:checklistItem.timestamp];
+     
+     //image:
+     NSString *imageToLoad = [NSString stringWithFormat:@"%@.png", checklistItem.icon];
+     self.icon.image = [UIImage imageNamed:imageToLoad];
+     
+     //backgrounds:
+     if(checklistItem.checked.boolValue == YES) [self setMode:@"complete"];
+     if(checklistItem.checked.boolValue == NO) [self setMode:@"incomplete"];
+     
+}
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated
 {
     [super setSelected:selected animated:animated];
@@ -79,6 +99,10 @@
     [formatter setDateFormat:@"hh:mm:ss"];
     NSString *stringFromDate = [formatter stringFromDate:date];
     self.timeStamp.text = stringFromDate;
+}
+-(void)selected:(BOOL)selected {
+    self.checkButtonRight.enabled = selected;
+    self.checkButtonLeft.enabled = selected;
 }
 
 - (IBAction)checkToggled:(id)sender {

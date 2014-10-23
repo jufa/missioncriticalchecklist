@@ -8,6 +8,7 @@
 
 #import <UIKit/UIKit.h>
 #import "Utils.h"
+#import "ChecklistItem.h"
 @protocol ChecklistItemTableViewCellDelegate;
 @interface ChecklistItemTableViewCell : UITableViewCell
 @property (weak, nonatomic) IBOutlet UITextField *actionTextField;
@@ -26,6 +27,8 @@
 -(void)setTimestamp:(NSDate *)date;
 -(void)setDetailText:(NSString*)text;
 -(void)setMode:(NSString*)mode;
+-(void)selected:(BOOL)selected;
+-(void) updateWithData:(ChecklistItem*)checklistItem;
 @property (weak, nonatomic) IBOutlet UIButton *checkButtonRight;
 @property (weak, nonatomic) IBOutlet UIButton *checkButtonLeft;
 
