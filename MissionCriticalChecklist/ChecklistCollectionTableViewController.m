@@ -105,7 +105,7 @@
         
         Checklist* checklist = (Checklist*)[self.fetchedResultsController objectAtIndexPath:indexPath];
         
-        ChecklistTableViewController *cltvc = segue.destinationViewController;
+        ChecklistViewController *cltvc = segue.destinationViewController;
         
         //pass data to checklist:
         [cltvc loadChecklist:checklist];

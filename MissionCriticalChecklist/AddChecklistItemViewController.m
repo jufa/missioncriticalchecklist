@@ -34,15 +34,15 @@
     _actionField.text = [self.currentChecklistItem action];
     _detailField.text = [self.currentChecklistItem detail];
     if ([self.mode isEqual: @"edit"]) {
-        self.navTitle.title = @"Edit Checklist Item";
+        self.titleLabel.text = @"Edit Checklist Item";
         _actionField.clearsOnBeginEditing = NO;
         _detailField.clearsOnBeginEditing = NO;
     } else if ([self.mode isEqual: @"add"]) {
-        self.navTitle.title = @"Add Checklist Item";
+        self.titleLabel.text = @"Add Checklist Item";
         _actionField.clearsOnBeginEditing = YES;
         _detailField.clearsOnBeginEditing = YES;
     } else {
-        self.navTitle.title = @"Add or Edit Checklist Item";
+        self.titleLabel.text = @"Add or Edit Checklist Item";
     }
     
     iconArray = ChecklistItemIcons.iconList;

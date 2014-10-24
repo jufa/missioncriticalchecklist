@@ -26,11 +26,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "MissionCriticalChecklist/ChecklistTableViewController.m"
-            timestampString = "432321733.749121"
+            timestampString = "435778928.394691"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "286"
-            endingLineNumber = "286"
+            startingLineNumber = "290"
+            endingLineNumber = "290"
             landmarkName = "-fetchedResultsController"
             landmarkType = "5">
          </BreakpointContent>
@@ -170,11 +170,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "MissionCriticalChecklist/ChecklistTableViewController.m"
-            timestampString = "432614751.249975"
+            timestampString = "435778928.394691"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "299"
-            endingLineNumber = "299"
+            startingLineNumber = "303"
+            endingLineNumber = "303"
             landmarkName = "-beginEdit:"
             landmarkType = "5">
          </BreakpointContent>
@@ -230,16 +230,64 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "MissionCriticalChecklist/ChecklistItemTableViewCell.m"
+            timestampString = "435778928.394691"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "34"
+            endingLineNumber = "34"
+            landmarkName = "-updateWithData:AndStartTime:"
+            landmarkType = "5">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "MissionCriticalChecklist/AddChecklistItemViewController.m"
+            timestampString = "435770161.031382"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "33"
+            endingLineNumber = "33"
+            landmarkName = "-viewDidLoad"
+            landmarkType = "5">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "MissionCriticalChecklist/ChecklistViewController.m"
-            timestampString = "435726231.669784"
+            timestampString = "435797335.312588"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "630"
-            endingLineNumber = "630"
-            landmarkName = "-updateProgress"
+            startingLineNumber = "131"
+            endingLineNumber = "131"
+            landmarkName = "-prepareForSegue:sender:"
+            landmarkType = "5">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "MissionCriticalChecklist/ChecklistViewController.m"
+            timestampString = "435797335.312588"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "373"
+            endingLineNumber = "373"
+            landmarkName = "-tableViewEditing:"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
@@ -250,12 +298,12 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "MissionCriticalChecklist/ChecklistItemTableViewCell.m"
-            timestampString = "435606326.259922"
+            timestampString = "435798118.591766"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "31"
-            endingLineNumber = "31"
-            landmarkName = "-updateWithData:"
+            startingLineNumber = "121"
+            endingLineNumber = "121"
+            landmarkName = "-setElapseTimeFrom:To:"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>

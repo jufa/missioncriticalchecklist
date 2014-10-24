@@ -10,6 +10,7 @@
 #import "AddChecklistViewController.h"
 #import "Checklist.h"
 #import "ChecklistCollectionTableViewCell.h"
+#import "ChecklistViewController.h"
 #import "AppDelegate.h"
 
 @interface ChecklistCollectionTableViewController : UITableViewController

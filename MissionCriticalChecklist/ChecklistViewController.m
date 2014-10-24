@@ -16,17 +16,18 @@
 
 
 @interface ChecklistViewController ()
-
 @property BOOL inReorderingOperation;
 @property ChecklistItem* checklistItemToEdit;
 @property BOOL checklistComplete;
 @property ChecklistItemTableViewCell* selectedCell;
 @property NSIndexPath* selectedRow;
+@property NSDate* startTimestamp; //TODO: implement this as a new managed object called "history". for now it is the same as the first scheckoff timestamp in the list
 
 @end
 
 @implementation ChecklistViewController {
     NSMutableArray *iconArray;
+    BOOL editingMode;
 }
 
 
@@ -46,6 +47,32 @@
         NSLog(@"Error in fetching checklist: %@",error);
         abort();
     }
+    
+    //establish checklist start time as earliest timestamp in checklist:
+    self.startTimestamp = [self checklistFindEarliest];
+    
+}
+
+-(NSDate*) checklistFindEarliest {
+    NSDate* earliest;
+    NSDate* current;
+    ChecklistItem* cli;
+    BOOL firstIter = YES;
+    
+    NSDateFormatter *mmddccyy = [[NSDateFormatter alloc] init];
+    mmddccyy.timeStyle = NSDateFormatterNoStyle;
+    mmddccyy.dateFormat = @"MM/dd/yyyy";
+    //earliest = [mmddccyy dateFromString:@"12/31/9999]"];
+    for (id object in [[self fetchedResultsController] fetchedObjects]) {
+        cli = (ChecklistItem*)object;
+        current = cli.timestamp;
+        if([earliest compare:current] == NSOrderedDescending || firstIter){
+            firstIter = NO;
+            //current cli timestamp is earlier than our earliest or first iteration:
+            earliest = [current copy];
+        }
+    }
+    return earliest;
 }
 
 #pragma mark -
@@ -96,6 +123,8 @@
     
     [self refreshInterface];
 }
+
+#pragma mark - segue handler
 
 -(void) prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
     //segue for modal to add new checklistItem:
@@ -169,6 +198,8 @@
     
     self.checklistComplete = YES; //init;
     
+    editingMode = NO;
+    
 }
 
 -(void) viewDidDisappear:(BOOL)animated
@@ -215,23 +246,55 @@
 {
     ChecklistItemTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier: @"Cell" forIndexPath:indexPath];
     ChecklistItem *checklistItem = [self.fetchedResultsController objectAtIndexPath:indexPath];
-    [cell updateWithData:checklistItem];
+    
+    //send ChecklistItem data to the cell:
+    [cell updateWithData:checklistItem AndStartTime:self.startTimestamp];
+    
+    //let the cell know when the checklist started:x
+    //[cell setElapseTimeFrom: self.startTimestamp To:checklistItem.timestamp];
+    
+    
+    //is the cell selected? let it know:
     if( self.selectedRow.row == indexPath.row && self.selectedRow != nil){
         [cell selected:YES];
     } else {
         [cell selected:NO];
     }
+    
+    //are we in editing mode? let the cell know:
+    if(editingMode) [cell editingModeStart];
+    else [cell editingModeEnd];
+    
+    
     return cell;
 }
 
 
 
-#pragma mark - User interaction
-- (IBAction)checklistsClick:(id)sender {
-    //get a ref to the parent navigator and pop me off the view stack:
-    UINavigationController *navController = self.navigationController;
-    [navController popViewControllerAnimated:YES];
+//NEVER CALLED
+- (void)setEditing:(BOOL)editing animated:(BOOL)animated {
+    NSLog(@"setEditing %i", editing);
+    [super setEditing:editing animated:animated];
+    editingMode = editing;
+    
+    //inform all visible cells:
+    for (ChecklistItemTableViewCell *cell in [self.tableView visibleCells]) {
+        //NSIndexPath *path = [self.tableView indexPathForCell:cell];
+        //cell.selectionStyle = (self.editing && (path.row > 1 || path.section == 0)) ? UITableViewCellSelectionStyleNone : UITableViewCellSelectionStyleBlue;
+        cell.editing = editing;
+    }
 }
+
+
+
+// Override to support conditional editing of the table view.
+
+- (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    return self.tableView.isEditing; //so User can't swipt to reveal delete while in run mode
+}
+
+
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
@@ -271,13 +334,6 @@
  */
 
 
-// Override to support conditional editing of the table view.
-- (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    // Return NO if you do not want the specified item to be editable.
-    return self.tableView.isEditing; //so User can't swipt to reveal delete while in run mode
-}
-
 
 
 // Override to support editing the table view.
@@ -313,6 +369,64 @@
  }
  */
 
+- (void)tableViewEditing:(BOOL)mode {
+    editingMode = mode;
+    //update visible cells:
+    for (ChecklistItemTableViewCell *cell in [self.tableView visibleCells]) {
+        //NSIndexPath *path = [self.tableView indexPathForCell:cell];
+        //cell.selectionStyle = (self.editing && (path.row > 1 || path.section == 0)) ? UITableViewCellSelectionStyleNone : UITableViewCellSelectionStyleBlue;
+        if(editingMode)[cell editingModeStart];
+        else [cell editingModeEnd];
+    }
+}
+
+
+#pragma mark - User interaction
+- (IBAction)checklistsClick:(id)sender {
+    //get a ref to the parent navigator and pop me off the view stack:
+    UINavigationController *navController = self.navigationController;
+    [navController popViewControllerAnimated:YES];
+}
+
+//user pressed the edit button. Put table view in reorder edit mode:
+- (IBAction)beginEdit:(id)sender {
+    NSLog(@"begineEdit. In editing mode?: %i",self.tableView.isEditing);
+    UIButton* btn = (UIButton *)sender;
+    if(self.tableView.isEditing){
+        
+        //[btn setTitle:@"Edit" forState:UIControlStateNormal];
+        [btn setImage:[UIImage imageNamed:@"ico-edit.png"] forState:UIControlStateNormal];
+        
+        //end editing and commit changes:
+        [self.tableView setEditing:NO animated:YES];
+        
+        
+        NSError *error;
+        BOOL success = [self.fetchedResultsController performFetch:&error];
+        if (!success)
+        {
+            // Handle error
+        }
+        
+        success = [[self managedObjectContext] save:&error];
+        if (!success)
+        {
+            // Handle error
+        }
+        
+        
+        [self.tableView reloadData]; //debug
+        
+    } else {
+        
+        self.inReorderingOperation = NO;
+        //[btn setTitle:@"Done Editing" forState:UIControlStateNormal];
+        [btn setImage:[UIImage imageNamed:@"ico-editdone.png"] forState:UIControlStateNormal];
+        [self.tableView setEditing:YES animated:YES];
+    }
+    [self tableViewEditing:self.tableView.isEditing];
+}
+
 
 
 
@@ -341,42 +455,6 @@
     return _fetchedResultsController;
 }
 
-//user pressed the edit button. Put table view in reorder edit mode:
-- (IBAction)beginEdit:(id)sender {
-    UIButton* btn = (UIButton *)sender;
-    if(self.tableView.isEditing){
-        
-        //[btn setTitle:@"Edit" forState:UIControlStateNormal];
-        [btn setImage:[UIImage imageNamed:@"ico-edit.png"] forState:UIControlStateNormal];
-        
-        //end editing and commit changes:
-        [self.tableView setEditing:NO animated:YES];
-        
-        
-        NSError *error;
-        BOOL success = [self.fetchedResultsController performFetch:&error];
-        if (!success)
-        {
-            // Handle error
-        }
-        
-        success = [[self managedObjectContext] save:&error];
-        if (!success)
-        {
-            // Handle error
-        }
-        
-        [self.tableView reloadData]; //debug
-        
-    } else {
-        self.inReorderingOperation = NO;
-        //[btn setTitle:@"Done Editing" forState:UIControlStateNormal];
-        [btn setImage:[UIImage imageNamed:@"ico-editdone.png"] forState:UIControlStateNormal];
-        [self.tableView setEditing:YES animated:YES];
-    }
-}
-
-
 
 -(void) controllerWillChangeContent:(NSFetchedResultsController *)controller{
     [self.tableView beginUpdates];
@@ -402,15 +480,22 @@
             
             ChecklistItem* cli = [self.fetchedResultsController objectAtIndexPath:indexPath];
             ChecklistItemTableViewCell  *cell = (ChecklistItemTableViewCell*) [tableView cellForRowAtIndexPath:indexPath];
+
+            [cell updateWithData:cli AndStartTime:self.startTimestamp];
+            /*
+             ChecklistItemTableViewCell  *cell = (ChecklistItemTableViewCell*) [tableView cellForRowAtIndexPath:indexPath];
             cell.actionTextField.text = cli.action;
             cell.detailTextField.text = cli.detail;
             [cell.check setOn: cli.checked.boolValue animated:YES];
             [cell.checkLeft setOn: cli.checked.boolValue animated:YES];
-            [cell setTimestamp:cli.timestamp];
+            [cell setTimestamp:cli.timestamp AndStartTime:self.startTimestamp];
+            
             
             //cell background:
             if(cli.checked.boolValue == YES) [cell setMode:@"complete"];
             if(cli.checked.boolValue == NO) [cell setMode:@"incomplete"];
+             */
+            
         }
             break;
             
@@ -483,6 +568,9 @@
     NSError *error;
     [self.managedObjectContext save:&error];
     
+    //reset earliestChecklistCheckoff value:
+    self.startTimestamp = nil;
+    
     [self.tableView reloadData];
     [self refreshInterface];
     
@@ -548,6 +636,10 @@
     cli.checked = [NSNumber numberWithBool:!cli.checked.boolValue];
     
     cli.timestamp = [NSDate date];
+    
+    if(self.startTimestamp == nil) {
+        self.startTimestamp  = [self checklistFindEarliest];
+    };
     
     //and resave the whole managed object context:
     NSError *error;

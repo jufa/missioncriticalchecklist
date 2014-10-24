@@ -103,7 +103,7 @@
         
         Checklist* checklist = (Checklist*)[self.fetchedResultsController objectAtIndexPath:indexPath];
         
-        ChecklistTableViewController *cltvc = segue.destinationViewController;
+        ChecklistViewController *cltvc = segue.destinationViewController;
         
         //pass data to checklist:
         [cltvc loadChecklist:checklist];
@@ -178,8 +178,9 @@
     
     // Configure the cell...
     Checklist *checklist = [self.fetchedResultsController objectAtIndexPath:indexPath];
-    cell.typeTextField.text = checklist.type;
-    cell.nameTextField.text = checklist.name;
+    //cell.typeTextField.text = checklist.type;
+    //cell.nameTextField.text = checklist.name;
+    [cell updateWithData:checklist];
     return cell;
 }
 

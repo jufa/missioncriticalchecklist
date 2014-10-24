@@ -8,7 +8,9 @@
 
 #import "ChecklistItemTableViewCell.h"
 
-@implementation ChecklistItemTableViewCell
+@implementation ChecklistItemTableViewCell {
+    BOOL editing;
+}
 
 
 - (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier
@@ -16,6 +18,7 @@
     self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
     if (self) {
         // @see: http://justabunchoftyping.com/fix-for-ios7-uitextview-issues
+        editing = NO;
     }
     return self;
 }
@@ -25,16 +28,13 @@
     // Initialization code
 }
 
--(void) updateWithData:(ChecklistItem *)checklistItem{
+-(void) updateWithData:(ChecklistItem *)checklistItem AndStartTime:(NSDate*)startTime{
     
      // Configure the cell...
      self.actionTextField.text = checklistItem.action;
      [self setDetailText:checklistItem.detail];
-     
-     //switch:
-     //[cell.check setOn:checklistItem.checked.boolValue animated:NO];
-     //[cell.checkLeft setOn:checklistItem.checked.boolValue animated:NO];
-     [self setTimestamp:checklistItem.timestamp];
+
+     [self setTimestamp:checklistItem.timestamp AndStartTime:startTime];
      
      //image:
      NSString *imageToLoad = [NSString stringWithFormat:@"%@.png", checklistItem.icon];
@@ -43,7 +43,7 @@
      //backgrounds:
      if(checklistItem.checked.boolValue == YES) [self setMode:@"complete"];
      if(checklistItem.checked.boolValue == NO) [self setMode:@"incomplete"];
-     
+    
 }
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated
 {
@@ -66,7 +66,6 @@
     } else if ([mode isEqualToString:@"skipped"]) {
         suffix = @"blue";
     }
-        
     //set left and right switch background images:
     self.backgroundLeft.image = [UIImage imageNamed: [NSString stringWithFormat:@"cli-bg-left-%@", suffix]];
     
@@ -80,13 +79,18 @@
 
 
 -(void) editingModeStart {
-    [self.check setHidden:YES];
-    [self.checkLeft setHidden:YES];
+    editing = YES;
+    [self hideBackgrounds:editing];
 }
 
 -(void) editingModeEnd {
-    [self.check setHidden:NO];
-    [self.checkLeft setHidden:NO];
+    editing = NO;
+    [self hideBackgrounds:editing];
+}
+
+-(void) hideBackgrounds:(BOOL)hidden {
+    self.backgroundLeft.hidden = hidden;
+    self.backgroundRight.hidden = hidden;
 }
 
 -(void) reset {
@@ -94,12 +98,48 @@
     [self.checkLeft setOn: NO];
 }
 
--(void) setTimestamp:(NSDate*)date {
+-(void) setTimestamp:(NSDate*)date AndStartTime:(NSDate*)startDate {
     NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
     [formatter setDateFormat:@"hh:mm:ss"];
     NSString *stringFromDate = [formatter stringFromDate:date];
     self.timeStamp.text = stringFromDate;
+    
+    [self setElapseTimeFrom:date To:startDate];
 }
+
+//TODO: implement this:
+-(void) setElapseTimeFrom:(NSDate*)startDate To:(NSDate*)endDate {
+    if(startDate == nil) {
+        NSLog(@"startdate is nil");
+    };
+    if(endDate == nil) {
+        NSLog(@"enddate is nil");
+    };
+    if(startDate == nil || endDate == nil) return;
+    NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
+    [formatter setDateFormat:@"(hh:mm:ss)"];
+    NSString *stringFromDate = [formatter stringFromDate:startDate];
+    self.timeStamp.text = stringFromDate;
+    
+    //calc diff:
+    NSCalendar *calendar = [[NSCalendar alloc] initWithCalendarIdentifier:NSGregorianCalendar];
+    NSDateComponents *components = [calendar components:NSYearCalendarUnit|NSMonthCalendarUnit|NSDayCalendarUnit|NSHourCalendarUnit|NSMinuteCalendarUnit|NSSecondCalendarUnit
+                                               fromDate:endDate
+                                                 toDate:startDate
+                                                options:0];
+    
+    NSLog(@"Difference in date components (sec to year): %li %li %li %li %li %li", (long)components.second, (long)components.minute, (long)components.hour, (long)components.day, (long)components.month, (long)components.year);
+    
+
+    if(components.hour > 0){
+            self.elapseTimeStamp.text = [NSString stringWithFormat:@"+%d:%02d:%02d",components.hour, components.minute, components.second];
+    } else {
+            self.elapseTimeStamp.text = [NSString stringWithFormat:@"+%02d:%02d",components.minute, components.second];
+    }
+    
+}
+
+
 -(void)selected:(BOOL)selected {
     self.checkButtonRight.enabled = selected;
     self.checkButtonLeft.enabled = selected;

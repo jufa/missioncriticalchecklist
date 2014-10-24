@@ -26,6 +26,7 @@
 
 - (IBAction)cancel:(id)sender;
 - (IBAction)save:(id)sender;
+@property (weak, nonatomic) IBOutlet UILabel *titleLabel;
 
 @end
 

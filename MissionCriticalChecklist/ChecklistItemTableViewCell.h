@@ -16,6 +16,7 @@
 @property (weak, nonatomic) IBOutlet UISwitch *check;
 @property (weak, nonatomic) IBOutlet UISwitch *checkLeft;
 @property (weak, nonatomic) IBOutlet UITextField *timeStamp;
+@property (weak, nonatomic) IBOutlet UITextField *elapseTimeStamp;
 @property NSInteger index;
 @property (weak, nonatomic) IBOutlet UIImageView *icon;
 @property (weak, nonatomic) IBOutlet UIImageView *backgroundLeft;
@@ -24,11 +25,12 @@
 -(void)editingModeStart;
 -(void)editingModeEnd;
 -(void)reset;
--(void)setTimestamp:(NSDate *)date;
+-(void)setTimestamp:(NSDate *)date AndStartTime:(NSDate*)startTime;
 -(void)setDetailText:(NSString*)text;
 -(void)setMode:(NSString*)mode;
 -(void)selected:(BOOL)selected;
--(void) updateWithData:(ChecklistItem*)checklistItem;
+-(void) updateWithData:(ChecklistItem*)checklistItem AndStartTime:(NSDate*)startTime;
+-(void) setElapseTimeFrom:(NSDate*)startDate To:(NSDate*)endDate;
 @property (weak, nonatomic) IBOutlet UIButton *checkButtonRight;
 @property (weak, nonatomic) IBOutlet UIButton *checkButtonLeft;
 

@@ -7,7 +7,6 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "ChecklistTableViewController.h"
 
 @interface AppDelegate : UIResponder <UIApplicationDelegate>
 

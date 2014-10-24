@@ -7,6 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "Checklist.h";
 @protocol ChecklistCollectionTableViewCellDelegate;
 @interface ChecklistCollectionTableViewCell : UITableViewCell
 @property (weak, nonatomic) IBOutlet UITextField *typeTextField;
@@ -20,6 +21,7 @@
 -(void)editingModeEnd;
 -(void)reset;
 -(void)setTimestamp:(NSDate *)date;
+-(void) updateWithData:(Checklist *)checklist;
 
 @end
 
