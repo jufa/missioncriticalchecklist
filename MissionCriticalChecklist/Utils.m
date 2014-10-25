@@ -9,6 +9,7 @@
 #import "Utils.h"
 
 @implementation Utils
+@synthesize moc;
 
 + (CGFloat)measureHeightOfUITextView:(UITextView *)textView
 {
@@ -73,5 +74,73 @@
     }
     return r;
 }
+
+#pragma mark - fetched results controllers and managed object handling
+
+//Checklist:
+
++(NSFetchedResultsController*) checklistFetchedResultsController:(NSFetchedResultsController*)fetchedResultsController
+    withChecklistName:(NSString*)checklistName
+    withDelegate:(id)delegate
+{
+    NSManagedObjectContext * context = [(AppDelegate *) [[UIApplication sharedApplication] delegate] managedObjectContext];
+    
+    if (fetchedResultsController != nil)  {
+        [NSFetchedResultsController deleteCacheWithName:@"root"];
+        return fetchedResultsController;
+    }
+    NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
+    NSEntityDescription *entity = [NSEntityDescription entityForName:@"ChecklistItem" inManagedObjectContext: context];
+    [fetchRequest setEntity:entity];
+    // Specify criteria for filtering which objects to fetch
+    //NSPredicate *predicate = [NSPredicate predicateWithFormat:@"action like %@ and checklist like %@", @"*", self.checklist.name];
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"checklist.name == %@",checklistName];
+    [fetchRequest setPredicate:predicate];
+    // Specify how the fetched objects should be sorted
+    NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"index" ascending:YES];
+    [fetchRequest setSortDescriptors:[NSArray arrayWithObjects:sortDescriptor, nil]];
+    fetchedResultsController = [[NSFetchedResultsController alloc] initWithFetchRequest:fetchRequest managedObjectContext:context sectionNameKeyPath:nil cacheName:nil];
+    fetchedResultsController.delegate = delegate;
+    
+    return fetchedResultsController;
+}
+
+
+//Checklist Collection:
+
++(NSFetchedResultsController*) checklistCollectionFetchedResultsController:(NSFetchedResultsController*)fetchedResultsController withDelegate:(id)delegate
+{
+    NSManagedObjectContext * context = [(AppDelegate *) [[UIApplication sharedApplication] delegate] managedObjectContext];
+    
+    if (fetchedResultsController != nil)  {
+        [NSFetchedResultsController deleteCacheWithName:@"root"];
+        return fetchedResultsController;
+    }
+    NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
+    NSEntityDescription *entity = [NSEntityDescription entityForName:@"Checklist" inManagedObjectContext: context];
+    [fetchRequest setEntity:entity];
+    // Specify criteria for filtering which objects to fetch
+    //NSPredicate *predicate = [NSPredicate predicateWithFormat:@"action like %@ and checklist like %@", @"*", self.checklist.name];
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"name like %@", @"*"];
+    [fetchRequest setPredicate:predicate];
+    // Specify how the fetched objects should be sorted
+    NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"index" ascending:YES];
+    [fetchRequest setSortDescriptors:[NSArray arrayWithObjects:sortDescriptor, nil]];
+    fetchedResultsController = [[NSFetchedResultsController alloc] initWithFetchRequest:fetchRequest managedObjectContext:context sectionNameKeyPath:nil cacheName:nil];
+    fetchedResultsController.delegate = delegate;
+    
+    return fetchedResultsController;
+}
+
++ (NSString*)nowAsString {
+    NSString * now;
+    NSDateFormatter *df = [[NSDateFormatter alloc] init];
+    df.timeStyle = NSDateFormatterNoStyle;
+    df.dateFormat = @"yyyyMMMdd-hhmmss";
+    NSDate * nowDate = [[NSDate alloc] init]; //'now' when using default init
+    now = [df stringFromDate:nowDate];
+    return now;
+}
+
 
 @end

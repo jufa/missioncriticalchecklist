@@ -7,14 +7,17 @@
 //
 
 #import <UIKit/UIKit.h>
+#import <MessageUI/MessageUI.h>
 #import "AddChecklistViewController.h"
 #import "Checklist.h"
 #import "ChecklistCollectionTableViewCell.h"
 #import "ChecklistViewController.h"
+#import "Utils.h"
+#import "ImportExport.h";
 #import "AppDelegate.h"
 
 @interface ChecklistCollectionViewController : UIViewController
-<AddChecklistViewControllerDelegate, NSFetchedResultsControllerDelegate, UITableViewDataSource, UITableViewDelegate>
+<AddChecklistViewControllerDelegate, NSFetchedResultsControllerDelegate, UITableViewDataSource, UITableViewDelegate, MFMailComposeViewControllerDelegate>
 
 @property (nonatomic, strong) NSManagedObjectContext *managedObjectContext;
 
@@ -22,6 +25,7 @@
 - (IBAction)beginEdit:(id)sender;
 - (IBAction)resetChecklist:(id)sender;
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
-
+-(IBAction)exportChecklistCollectionByEmail:(id)sender;
+@property (weak, nonatomic) IBOutlet UIButton *buttonExport;
 
 @end

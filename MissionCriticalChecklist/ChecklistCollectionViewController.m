@@ -241,6 +241,7 @@
 }
 
 
+
 /*
  // Override to support rearranging the table view.
  - (void)tableView:(UITableView *)tableView moveRowAtIndexPath:(NSIndexPath *)fromIndexPath toIndexPath:(NSIndexPath *)toIndexPath
@@ -259,6 +260,11 @@
 
 #pragma mark - Fetch Results Controller section
 -(NSFetchedResultsController*) fetchedResultsController {
+    
+    _fetchedResultsController = [Utils checklistCollectionFetchedResultsController:_fetchedResultsController withDelegate:self];
+    
+    
+    /*
     if (_fetchedResultsController != nil)  {
         return _fetchedResultsController;
     }
@@ -273,6 +279,7 @@
     [fetchRequest setSortDescriptors:[NSArray arrayWithObjects:sortDescriptor, nil]];
     _fetchedResultsController = [[NSFetchedResultsController alloc] initWithFetchRequest:fetchRequest managedObjectContext:[self managedObjectContext] sectionNameKeyPath:nil cacheName:nil];
     _fetchedResultsController.delegate = self;
+    */
     
     return _fetchedResultsController;
 }
@@ -449,5 +456,65 @@
  // Pass the selected object to the new view controller.
  }
  */
+
+#pragma mark - mail export handling
+
+-(IBAction)exportChecklistCollectionByEmail:(id)sender {
+    
+    //build checklist string test. TODO: implement:
+    
+    NSData * attachmentData = [ImportExport buildChecklistFile];
+    
+    // Email Subject
+    NSString *emailTitle = @"MCC Exported Checklist Collection";
+    // Email Content
+    NSString *messageBody = @"See attached";
+    // To address
+    NSArray *toRecipents = [NSArray arrayWithObject:@"jeremykuzub@gmail.com"];
+    //toRecipents = [NSArray arrayWithObjects: self.emailField.text, nil];
+    if ([MFMailComposeViewController canSendMail]) {
+        MFMailComposeViewController *mc = [[MFMailComposeViewController alloc] init];
+        mc.mailComposeDelegate = self;
+        [mc setSubject:emailTitle];
+        [mc setMessageBody:messageBody isHTML:NO];
+        [mc setToRecipients:toRecipents];
+        [mc addAttachmentData:attachmentData mimeType:@"text/plain" fileName:[NSString stringWithFormat:@"MCC-ChecklistExport-%@.txt",[Utils nowAsString]]];
+        mc.modalPresentationStyle = UIModalPresentationFormSheet;
+        
+        // Present mail view controller on screen
+        [self presentViewController:mc animated:YES completion:nil];
+
+    } else {
+        //TODO: handle error
+        NSLog(@">>>>ERROR<<<< exportChecklistCollectionByEmail: cannot send email from this device. Mail may not be configured.");
+    }
+}
+
+
+//TODO: error and success handling for mailout:
+- (void) mailComposeController:(MFMailComposeViewController *)controller didFinishWithResult:(MFMailComposeResult)result error:(NSError *)error
+{
+    switch (result)
+    {
+        case MFMailComposeResultCancelled:
+            NSLog(@"Mail cancelled");
+            break;
+        case MFMailComposeResultSaved:
+            NSLog(@"Mail saved");
+            break;
+        case MFMailComposeResultSent:
+            NSLog(@"Mail sent");
+            break;
+        case MFMailComposeResultFailed:
+            NSLog(@"Mail sent failure: %@", [error localizedDescription]);
+            break;
+        default:
+            break;
+    }
+    
+    // Close the Mail Interface
+    [self dismissViewControllerAnimated:YES completion:NULL];
+}
+
 
 @end

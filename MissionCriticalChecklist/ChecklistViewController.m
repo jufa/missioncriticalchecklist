@@ -43,10 +43,19 @@
     
     
     NSError *error = nil;
+    
     if(![[self fetchedResultsController] performFetch:&error]){
         NSLog(@"Error in fetching checklist: %@",error);
         abort();
     }
+    
+   /*
+    if(![[Utils checklistFetchedResultsController:self.fetchedResultsController withChecklistName:self.checklist.name withDelegate:self ] performFetch:&error]){
+        NSLog(@"Error in fetching checklist: %@",error);
+        abort();
+    }
+    */
+    
     
     //establish checklist start time as earliest timestamp in checklist:
     self.startTimestamp = [self checklistFindEarliest];
@@ -433,8 +442,11 @@
 
 #pragma mark - Fetch Results Controller section
 
-
 -(NSFetchedResultsController*) fetchedResultsController {
+    
+    _fetchedResultsController = [Utils checklistFetchedResultsController:_fetchedResultsController withChecklistName:self.checklist.name withDelegate:self];
+    
+    /*
     if (_fetchedResultsController != nil)  {
         [NSFetchedResultsController deleteCacheWithName:@"root"];
         return _fetchedResultsController;
@@ -451,10 +463,10 @@
     [fetchRequest setSortDescriptors:[NSArray arrayWithObjects:sortDescriptor, nil]];
     _fetchedResultsController = [[NSFetchedResultsController alloc] initWithFetchRequest:fetchRequest managedObjectContext:[self managedObjectContext] sectionNameKeyPath:nil cacheName:nil];
     _fetchedResultsController.delegate = self;
+     */
     
     return _fetchedResultsController;
 }
-
 
 -(void) controllerWillChangeContent:(NSFetchedResultsController *)controller{
     [self.tableView beginUpdates];

@@ -12,6 +12,7 @@
 #import "ChecklistItemIcons.h"
 #import "Checklist.h"
 #import "ChecklistItemTableViewCell.h"
+#import "Utils.h"
 #import "AppDelegate.h"
 
 @interface ChecklistViewController : UIViewController

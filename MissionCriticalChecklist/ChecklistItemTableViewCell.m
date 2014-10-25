@@ -61,10 +61,13 @@
     
     if ([mode isEqualToString:@"incomplete"]) {
         suffix = @"grey";
+        [self hideTimestamps:YES];
     } else if ([mode isEqualToString:@"complete"]) {
         suffix = @"green";
+        [self hideTimestamps:NO];
     } else if ([mode isEqualToString:@"skipped"]) {
         suffix = @"blue";
+        [self hideTimestamps:YES];
     }
     //set left and right switch background images:
     self.backgroundLeft.image = [UIImage imageNamed: [NSString stringWithFormat:@"cli-bg-left-%@", suffix]];
@@ -73,6 +76,11 @@
     
 }
 
+-(void) hideTimestamps:(BOOL)hidden {
+    self.timeStamp.hidden = hidden;
+    self.elapseTimeStamp.hidden = hidden;
+    
+}
 -(void) setDetailText:(NSString*)text{
     self.detailTextField.text = text;
 }
@@ -91,6 +99,8 @@
 -(void) hideBackgrounds:(BOOL)hidden {
     self.backgroundLeft.hidden = hidden;
     self.backgroundRight.hidden = hidden;
+    [self hideTimestamps:hidden];
+    
 }
 
 -(void) reset {
@@ -110,12 +120,15 @@
 //TODO: implement this:
 -(void) setElapseTimeFrom:(NSDate*)startDate To:(NSDate*)endDate {
     if(startDate == nil) {
-        NSLog(@"startdate is nil");
+        //NSLog(@"startdate is nil");
     };
     if(endDate == nil) {
-        NSLog(@"enddate is nil");
+        //NSLog(@"enddate is nil");
     };
-    if(startDate == nil || endDate == nil) return;
+    if(startDate == nil || endDate == nil){
+        self.elapseTimeStamp.text=@"";
+        return;
+    }
     NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
     [formatter setDateFormat:@"(hh:mm:ss)"];
     NSString *stringFromDate = [formatter stringFromDate:startDate];
@@ -128,15 +141,11 @@
                                                  toDate:startDate
                                                 options:0];
     
-    NSLog(@"Difference in date components (sec to year): %li %li %li %li %li %li", (long)components.second, (long)components.minute, (long)components.hour, (long)components.day, (long)components.month, (long)components.year);
-    
-
     if(components.hour > 0){
             self.elapseTimeStamp.text = [NSString stringWithFormat:@"+%d:%02d:%02d",components.hour, components.minute, components.second];
     } else {
             self.elapseTimeStamp.text = [NSString stringWithFormat:@"+%02d:%02d",components.minute, components.second];
-    }
-    
+    }    
 }
 
 
