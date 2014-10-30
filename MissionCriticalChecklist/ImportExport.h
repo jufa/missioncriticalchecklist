@@ -32,7 +32,10 @@
 //Q: what about duplicates? how is one defined? checksum?
 -(void) addChecklistsFromFile:(NSFileHandle*) file;
 
+//returns true if ManagedObject is updated:
++(BOOL) importChecklistsFromURL:(NSURL*) url;
 
++ (NSString*)trimWhitespace:(NSString*)str;
 
 @end
 

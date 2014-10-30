@@ -30,6 +30,7 @@
     [self dismissViewControllerAnimated:YES completion:nil];
 }
 
+
 -(void) addChecklistViewControllerDidSave:(Checklist *)checklistToSave{
     
     //if we are not in editing mode, it's a new checklist inserted, if we ARE in editing mode, we are editing an existing checklist and no insertion stuff is needed:
@@ -60,6 +61,7 @@
     NSError *error = nil;
     NSManagedObjectContext *context =  self.managedObjectContext;
     if(![context save:&error]){
+        //TODO: handle error:
         NSLog(@"Error saving new checklist ");
     }
     [self dismissViewControllerAnimated:YES completion:nil];
@@ -377,8 +379,23 @@
         case NSFetchedResultsChangeInsert:
             [tableView insertRowsAtIndexPaths:[NSArray arrayWithObjects:newIndexPath, nil] withRowAnimation:UITableViewRowAnimationFade];
             break;
-        case NSFetchedResultsChangeDelete:
+        case NSFetchedResultsChangeDelete: {
+            //update indices below deleted item:
+            
+            self.inReorderingOperation = YES;
             [tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:UITableViewRowAnimationFade];
+            NSMutableArray *array = [[self.fetchedResultsController fetchedObjects] mutableCopy];
+            
+            //int newIndex;
+            for (int i=0; i<[array count]; i++)
+            {
+                [(NSManagedObject *)[array objectAtIndex:i] setValue:[NSNumber numberWithInt:(i)] forKey:@"index"];
+            }
+            self.inReorderingOperation = NO;
+            
+            [tableView reloadData]; //debug
+           
+        }
             break;
         case NSFetchedResultsChangeUpdate: {
             
@@ -386,8 +403,6 @@
             ChecklistCollectionTableViewCell  *cell = (ChecklistCollectionTableViewCell*) [tableView cellForRowAtIndexPath:indexPath];
             cell.typeTextField.text = cli.type;
             cell.nameTextField.text = cli.name;
-            //[cell.check setOn: cli.checked.boolValue];
-            //[cell setTimestamp:cli.timestamp];
         }
             break;
             

@@ -31,7 +31,7 @@
 -(void) updateWithData:(ChecklistItem *)checklistItem AndStartTime:(NSDate*)startTime{
     
      // Configure the cell...
-     self.actionTextField.text = checklistItem.action;
+     self.actionTextField.text = [NSString stringWithFormat:@"%@. %@", checklistItem.index, checklistItem.action];
      [self setDetailText:checklistItem.detail];
 
      [self setTimestamp:checklistItem.timestamp AndStartTime:startTime];

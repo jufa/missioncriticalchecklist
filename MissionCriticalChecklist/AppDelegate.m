@@ -159,4 +159,13 @@
     return [[[NSFileManager defaultManager] URLsForDirectory:NSDocumentDirectory inDomains:NSUserDomainMask] lastObject];
 }
 
+#pragma mark - file attachment - handle "open with"
+-(BOOL) application:(UIApplication *)application openURL:(NSURL *)url sourceApplication:(NSString *)sourceApplication annotation:(id)annotation
+{
+    if (url != nil && [url isFileURL]){
+        [ImportExport importChecklistsFromURL: url];
+    }
+    return YES;
+}
+
 @end
