@@ -15,57 +15,44 @@
 //TODO: reference this for opening email extentions: https://developer.apple.com/library/ios/qa/qa1587/_index.html
 
 #define ALERT_TITLE_CHECKLIST_EXISTS @"Checklist Exists"
+#define ALERT_TITLE_IMPORT_CHECKLISTS @"Import Checklists"
 #define AOD_KEEP_OLD 1
 #define AOD_KEEP_NEW 2
 #define AOD_KEEP_BOTH 3
 #define AOD_PROMPT_USER 4
+#define AOD_USE_DEFAULT 5
 
 
-static NSMutableArray* _checklists;
+
 
 @implementation ImportExport {
-    // privates:
-    
-    NSString* checklistCollectionString;
-    
+    //global variables for all class instance, precede by static keyword.
 };
-//@synthesize checklists = _checklists;
-//@synthesize fetchedResultsController = _fetchedResultsController;
 
+static NSURL* _importUrl;
++ (NSURL*)importUrl {
+    return _importUrl;
+}
+static int _defaultImportAction;
++ (int)defaultImportAction {
+    return _defaultImportAction;
+}
+static int _checklistsToImport;
++ (int)checklistsToImport {
+    return _checklistsToImport;
+}
+static NSMutableArray* _checklists;
 + (NSMutableArray*)checklists {
     return _checklists;
 }
 
 
-+ (NSString*) buildChecklistString:(Checklist*) checklist {
-    
-    //NSManagedObjectContext *moc = [(AppDelegate *) [[UIApplication sharedApplication] delegate] managedObjectContext];
-    
-    NSError *error = nil;
-    NSFetchedResultsController *frc = nil;
-    
-    frc = [Utils checklistFetchedResultsController:frc withChecklistName:checklist.name withDelegate:self];
-    
-    if(![frc performFetch:&error]){
-        NSLog(@"buildChecklistString: Error in fetching checklist: %@",error);
-        abort();
-    }
-
-    //TODO: essentially serialize the Managed Object that matches the checklist, return an NSString
-    ChecklistItem * cli;
-    NSString* cls=@"";//checklistString = @"";
-    
-    for (id object in [frc fetchedObjects]) {
-        cli = (ChecklistItem*)object;
-        //NSLog(@"%@",cli.action);
-        
-        cls = [cls stringByAppendingString: [NSString stringWithFormat:@"--- %@ -- %@ -- %@ --\n",cli.action,cli.detail, cli.icon ]];
-
-    }
-    
-    return cls;
-}
-
+/**
+ *
+ * returns a string containing the custom markdown version of the coredata checklists and their checklist items, in order
+ *
+ */
+ 
 + (NSData*) buildChecklistFile {
     //TODO: build up the file using multiple calls to buildChecklistString
     
@@ -89,240 +76,87 @@ static NSMutableArray* _checklists;
         cli = (Checklist*)object;
         str = [NSString stringWithFormat:@"### %@ -- %@ -- %@ --\n",cli.name, cli.type, cli.icon];
         fs = [fs stringByAppendingString: str];
-        
         fs = [fs stringByAppendingString: [ImportExport buildChecklistString:cli]];
         fs = [fs stringByAppendingString: @"\n\n"];
-
-        
     }
     
-    // Build the path, and create if needed.
+    // Build the path, and create if needed:
     NSString* filePath = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0];
     NSString* fileName = @"MCC-checklists.txt";
     NSString* fileAtPath = [filePath stringByAppendingPathComponent:fileName];
     NSData * data = nil;
     
     if ([[NSFileManager defaultManager] fileExistsAtPath:fileAtPath]) {
-        [[NSFileManager defaultManager] removeItemAtPath:fileAtPath error:nil]; //TODO: error handling
+        [[NSFileManager defaultManager] removeItemAtPath:fileAtPath error:&error]; //TODO: error handling
+    }
+    if(error) {
+        NSLog(@"ERROR: ImportExport::buildChecklistFile: could not remove a previous local copy of checklist export file");
+        return nil;
     }
         
     if (![[NSFileManager defaultManager] fileExistsAtPath:fileAtPath]) {
         [[NSFileManager defaultManager] createFileAtPath:fileAtPath contents:nil attributes:nil];
         if (![[fs dataUsingEncoding:NSUTF8StringEncoding] writeToFile:fileAtPath atomically:NO]){
             //TODO: error handling
-            NSLog(@">>> ERROR <<< buildChecklistFile: Could not write file to path");
+            NSLog(@"ERROR: ImportExport::buildChecklistFile: Could not write file to path");
         }
-        //NSFileHandle * fh = [NSFileHandle fileHandleForReadingAtPath:fileAtPath];
         data = [NSData dataWithContentsOfFile:fileAtPath];
     } else {
         //TODO: error handling
-        NSLog(@">>> ERROR <<< buildChecklistFile: Could not build output file. It already exists");
+        NSLog(@"ERROR: ImportExport::buildChecklistFile: Could not build output file. It already exists");
     }
-    
-    //NSLog(fs);
-    
     return data;
 }
 
-+ (NSFileHandle*) buildChecklistJSON {
+
+//Helper function for buildChecklistFile - assembles a string of checklist items for the specified checklist:
++ (NSString*) buildChecklistString:(Checklist*) checklist {
     
-    
-    NSManagedObjectContext *moc = [(AppDelegate *) [[UIApplication sharedApplication] delegate] managedObjectContext];
-    
-    
+    //NSManagedObjectContext *moc = [(AppDelegate *) [[UIApplication sharedApplication] delegate] managedObjectContext];
     
     NSError *error = nil;
     NSFetchedResultsController *frc = nil;
     
-    frc = [Utils checklistCollectionFetchedResultsController:frc withDelegate:self];
+    frc = [Utils checklistFetchedResultsController:frc withChecklistName:checklist.name withDelegate:self];
     
     if(![frc performFetch:&error]){
-        NSLog(@"buildChecklistFile: Error in fetching checklist: %@",error);
+        NSLog(@"buildChecklistString: Error in fetching checklist: %@",error);
         abort();
     }
-    
-    //NSEntityDescription *entity = [NSEntityDescription entityForName:@"Checklist" inManagedObjectContext: moc];
-    
-    //NSMutableDictionary *fields = [NSMutableDictionary dictionary];
-    
-    Checklist* cli;
+
+    ChecklistItem * cli;
+    NSString* cls=@"";
     
     for (id object in [frc fetchedObjects]) {
-        cli = (Checklist*)object;
-        //[fields setObject:attributeValue forKey:attributeName];
+        cli = (ChecklistItem*)object;
+        cls = [cls stringByAppendingString: [NSString stringWithFormat:@"--- %@ -- %@ -- %@ --\n",cli.action,cli.detail, cli.icon ]];
     }
-    /*
-    for (NSAttributeDescription *attribute in [entity properties]) {
-        NSString *attributeName = attribute.name;
-        NSLog(@"attribute.name = %@", attributeName);
-        id attributeValue = [moc valueForKey:attributeName];
-        if (attributeValue) {
-            [fields setObject:attributeValue forKey:attributeName];
-        }
-    }
-     */
-    //NSLog(fields);
-    return nil;
+    return cls;
 }
 
 
-
-+(BOOL) importChecklistsFromURL:(NSURL*) url {
-    
-    //what state is the application in?
-    // + newly loaded?
-    // + at collectionview
-    // + at checklist?
-    // we need to know and change appropriately!
-    
-    
-    
-    if (url == nil) return NO;  //&& [url isFileURL
-    
-    NSArray * checklistItems;
-    NSArray * checklistEntries; //i.e. column data
-    BOOL checklistExists; //flag for checklist already existing in Managed Object Context
-    int i = 0;
-    int checklistItemIndex;
-    NSManagedObjectContext *moc = [(AppDelegate *) [[UIApplication sharedApplication] delegate] managedObjectContext];
-    BOOL addCurrentChecklist = NO;
-    int currentChecklistItemInsertionIndex = 0;
-    Checklist * newChecklist;
-    const int CHECKLIST_INFO_INDEX = 0;
-    
-    
-    //get list of existing checklists: will be needed for duplicate checks:
-    NSError *error = nil;
-    NSFetchedResultsController *frc = nil;
-    Checklist * cl;
-    
-    frc = [Utils checklistCollectionFetchedResultsController:frc withDelegate:self];
-    
-    if(![frc performFetch:&error]){
-        //TODO: handle error
-        NSLog(@"buildChecklistFile: Error in fetching checklist: %@",error);
-        abort();
-    }
-
-    //get file string:
-    NSError * err;
-    
-    NSString *str = [NSString stringWithContentsOfURL:url encoding:NSUTF8StringEncoding error: &err]; //needs indirect reference to error obj
-    //TODO: error handling:
-    if(err)NSLog(@"ERROR: importChecklistsFromURL -> Error converting url to string");
-    
-    //create array of checklist strings, 1 checklist per array item:
-    NSArray * checklists = [str componentsSeparatedByString:@"###"];
-    
-    
-    for (NSString * cliString in checklists){
-        if(i++ == 0) continue; //see http://stackoverflow.com/questions/8906221 - the first element will be nil since "###" is a separator with nothing ahead of it.
-        if(cliString == nil) continue;
-        checklistItems = [cliString componentsSeparatedByString:@"---"];
-        checklistItemIndex=0;
-        
-        //split checklist by checklistItem lines, extract checklist info
-        for (NSString * checklistItem in checklistItems) {
-            checklistEntries = [checklistItem componentsSeparatedByString:@"--"];
-            
-            //check if parsing a checklist info line:
-            if(checklistItemIndex++ == CHECKLIST_INFO_INDEX) {
-                addCurrentChecklist = NO;
-                //check if this checklist already exists:
-                checklistExists = NO;
-                for (id object in [frc fetchedObjects]) {
-                    cl = (Checklist*)object;
-                    if( [[self trimWhitespace: checklistEntries[0]] isEqualToString:cl.name]){
-                        //Checklists already exists, we need to stop and prompt for overwrite:
-                        checklistExists = YES;
-                        
-                        
-                    } else {
-                        ;
-                    }
-                }
-                
-                if(checklistExists){
-                    //we need to know what to do:
-                    NSLog(@"ALREADY exists: %@",checklistEntries[0]);
-                    //[self alertChecklistExists:[self trimWhitespace: checklistEntries[0]] ];
-                }
-                
-                //check if this checklist already exists based on name+type strings:
-                if (!checklistExists) {
-                    
-                    //no. add it:
-                    
-                    NSLog(@"NEW ITEM:  %@ as %@",checklistEntries[0], cl.name);
-                    
-                    addCurrentChecklist = YES;
-                    currentChecklistItemInsertionIndex = 0; //we are starting to insert new checklist
-                    
-                    //refresh frc info since a previous insert may have been done:
-
-                    if(![frc performFetch:&error]){
-                        //TODO: handle error
-                        NSLog(@"buildChecklistFile: Error in fetching checklist: %@",error);
-                        abort();
-                    }
-                    
-                    //add it to the MOC:
-                    
-                    newChecklist = (Checklist*)[NSEntityDescription insertNewObjectForEntityForName:@"Checklist" inManagedObjectContext:moc];
-                    
-                    // first populate the cl:
-                    newChecklist.name = [self trimWhitespace:checklistEntries[0]];
-                    newChecklist.type = [self trimWhitespace:checklistEntries[1]];
-                    newChecklist.icon = [self trimWhitespace:checklistEntries[2]];
-                    //assign the new items index based on last hilited cell and reflow  index values below it:
-                    NSInteger insertAt = -1;
-                    
-                    NSMutableArray *array = [[frc fetchedObjects] mutableCopy];
-                    
-                    insertAt = [array count];
-                    
-                    newChecklist.index = [NSNumber numberWithInt:insertAt];
-                    
-                    //save managed object
-                    NSError *error = nil;
-                    if(![moc save:&error]){
-                        //TODO: handle error:
-                        NSLog(@"Error saving new checklist ");
-                    }
-                }
-            } else {
-            //we are on a checklist item line, lets add it to MOC
-                if(addCurrentChecklist ==  YES) {
-                    ChecklistItem* cli = (ChecklistItem*)[NSEntityDescription insertNewObjectForEntityForName:@"ChecklistItem" inManagedObjectContext:moc];
-                    cli.action = [self trimWhitespace:checklistEntries[0]];
-                    cli.detail = [self trimWhitespace:checklistEntries[1]];
-                    cli.icon = [self trimWhitespace:checklistEntries[2]];
-                    cli.checked = [NSNumber numberWithBool:NO];
-                    cli.index = [NSNumber numberWithInt: currentChecklistItemInsertionIndex++];
-                    //must use the mutable set method. it will automatically dispatch the right event to ensure inverse relationship is set:
-                    NSMutableSet *checklistRelationship = [newChecklist mutableSetValueForKey:@"checklistItems"];
-                    [checklistRelationship addObject:cli];
-                    
-                    //save managed object
-                    NSError *error = nil;
-                    if(![moc save:&error])
-                    {
-                        //TODO: handle error:
-                        NSLog(@"Error saving new checklist ");
-                    }
-                }
-            }
-        }
-    }
-    return YES; //TODO: return NO if MOC unmodified
++ (int) numberOfChecklistsInUrlString:(NSURL*)url {
+    int count = -1;
+    return count;
 }
+
+
 
 /**
  *
  * text file at URL is parsed into array of checklist and array of checklistitem objects. 
+ * Because of duoicate detection and handinlg, and because posting UIALerts is non-blocking, this is implmented in a state machine pattern:
+ * parseChecklistFromUrl adds all new checklists and associated items from the URL. An array of these new checklists is created for the next step:
+ * duplicateChecklistCheck is then called to walk through this array of new checklists. If it finds a duplicate, it aborts and hands off control to
+ * alertChecklistExists which prompts user for action. 
+ * The user response handler then calls duplicateChecklistCheck with the corresponding action parameter (keep old, new or both), which updates the checklists as well as the array of new checklists.
+ * then calls it again with the ask User action
  *
  */
-+ (void) parseChecklistFromUrl:(NSURL*)url {
+
++ (void) parseChecklistFromUrl {
+    
+    NSURL* url = _importUrl;
     
     if (url == nil) return;  //&& [url isFileURL
     
@@ -405,12 +239,15 @@ static NSMutableArray* _checklists;
         //TODO: handle error:
         NSLog(@"Error saving new checklist ");
     }
-
-    //NSLog(@"Checklists: %d %@",[checklists count], checklists);
-    //NSLog(@"Checklist Items: %@",checklistItems);
     
     //check for duplicates:
-    [self duplicateChecklistCheck:AOD_PROMPT_USER];
+    if(_defaultImportAction == AOD_PROMPT_USER) {
+        [self duplicateChecklistCheck:AOD_PROMPT_USER];
+    } else {
+        while ([_checklists count] > 0) {
+            [self duplicateChecklistCheck:AOD_USE_DEFAULT];
+        }
+    }
 }
 
 //helper function to be called when a list of checklists is loaded into this class' Checklists array
@@ -430,86 +267,122 @@ static NSMutableArray* _checklists;
     
     if(![frc performFetch: &error]){
         //TODO: handle error
-        //NSLog(@"buildChecklistFile: Error in fetching checklist: %@", error);
-        abort();
+        NSLog(@"ERROR: ImportExport::duplicateChecklistCheck: cannot perform fetch of checklistCollections" );
+        return;
     }
     
     int currentAction = actionOnDuplicates;
-    NSLog(@"_checklists count : %d",[_checklists count]);
-    if([_checklists count] == 0) return;//we've gone through all the new checklists to check for duplicates.
+    if(_defaultImportAction != AOD_PROMPT_USER) currentAction = _defaultImportAction;
+    if([_checklists count] == 0) return;//TODO: send success alert to user here with number of checklists imported.
+    NSLog(@"checklists left: %d",[_checklists count]);
     for (id object in [frc fetchedObjects]) {
         Checklist* clExisting = (Checklist*)object;
         if(clExisting.objectID == clNew.objectID) continue;
         if([clExisting.name isEqualToString:clNew.name]){
             if([clExisting.type isEqualToString:clNew.type]){
-                if (currentAction == AOD_KEEP_OLD) {
-                    //remove it from the array of newly imported cl's:
-                    [_checklists removeLastObject];
-                    //delete clNew from moc
-                    [moc deleteObject:clNew];
-                    currentAction = AOD_PROMPT_USER;
-                } else if (actionOnDuplicates == AOD_KEEP_NEW) {
-                    //delete clExisting from moc
-                    [moc deleteObject:clExisting];
-                    [_checklists removeLastObject];
-                    currentAction = AOD_PROMPT_USER;
-                } else if (currentAction == AOD_KEEP_BOTH) {
-                    //do nothing, nothing!
-                    [_checklists removeLastObject];
-                    currentAction = AOD_PROMPT_USER;
-                } else if (currentAction == AOD_PROMPT_USER) {
-                    //call the popup to get user prompt:
-                    [self alertChecklistExists:clNew];
-                    return; //because hey, pop-ups are not blocking, so we let the pop u call this funtion again with instructions
+                switch (currentAction) {
+                    case AOD_KEEP_OLD:
+                        [_checklists removeLastObject];
+                        [moc deleteObject:clNew];
+                        break;
+                    case AOD_KEEP_NEW:
+                        [_checklists removeLastObject];
+                        [moc deleteObject:clExisting];
+                        break;
+                    case AOD_KEEP_BOTH:
+                        [_checklists removeLastObject];
+                        break;
+                    case AOD_PROMPT_USER:
+                        //call the popup to get user prompt:
+                        [self alertChecklistExists:clNew];
+                        break;
+                    default:
+                        break;
                 }
+                return;
             }
         }
     }
 }
 
 
+
+
 #pragma mark - alerts
++ (void) promptImportChecklistsFromUrl:(NSURL*)url {
+    _importUrl = url;
+    UIAlertView *alert = [[UIAlertView alloc] initWithTitle: ALERT_TITLE_IMPORT_CHECKLISTS
+                                                    message:[NSString stringWithFormat:@"Importing %d new Checklists. Select your default action if duplicates are found:",[ImportExport numberOfChecklistsInUrlString:url]]
+                                                   delegate:self
+                                          cancelButtonTitle:@"Cancel Import"
+                                          otherButtonTitles:nil];
+    [alert addButtonWithTitle:@"Keep Existing"];
+    [alert addButtonWithTitle:@"Keep New"];
+    [alert addButtonWithTitle:@"Keep Both"];
+    [alert addButtonWithTitle:@"Ask for Each"];
+    [alert show];
+}
+
+
+
 + (void) alertChecklistExists:(Checklist*)checklist {
     UIAlertView *alert = [[UIAlertView alloc] initWithTitle: ALERT_TITLE_CHECKLIST_EXISTS
-                                                    message:[NSString stringWithFormat:@"NAME: %@\nTYPE: %@",checklist.name, checklist.type]
-                                                     delegate:self
+                                            message:[NSString stringWithFormat:@"NAME: %@\nTYPE: %@",checklist.name, checklist.type]
+                                            delegate:self
                                             cancelButtonTitle:nil
                                             otherButtonTitles:nil];
     [alert addButtonWithTitle:@"Keep Existing"];
     [alert addButtonWithTitle:@"Keep New"];
     [alert addButtonWithTitle:@"Keep Both"];
-    
     [alert show];
 }
 
 //alert response handler
 + (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
 {
-    
-    //if ([title isEqualToString: ALERT_TITLE_CHECKLIST_EXISTS]) {
-        //NSLog(@"selected button is: %@", [alertView buttonTitleAtIndex:buttonIndex]);
-    //}
-    
-    switch (buttonIndex) {
-        case 0:
-            NSLog(@"KEEP EXISTING");
-            [ImportExport duplicateChecklistCheck:AOD_KEEP_OLD];
-            break;
-        case 1:
-            NSLog(@"KEEP NEW");
-            [ImportExport duplicateChecklistCheck:AOD_KEEP_NEW];
-            break;
-        case 2:
-            NSLog(@"KEEP BOTH");
-            [ImportExport duplicateChecklistCheck:AOD_KEEP_BOTH];
-            break;
-        default:
-            break;
+    if([alertView.title isEqualToString:ALERT_TITLE_CHECKLIST_EXISTS]){
+        switch (buttonIndex) {
+            case 0:
+                NSLog(@"KEEP EXISTING");
+                [ImportExport duplicateChecklistCheck:AOD_KEEP_OLD];
+                break;
+            case 1:
+                NSLog(@"KEEP NEW");
+                [ImportExport duplicateChecklistCheck:AOD_KEEP_NEW];
+                break;
+            case 2:
+                NSLog(@"KEEP BOTH");
+                [ImportExport duplicateChecklistCheck:AOD_KEEP_BOTH];
+                break;
+            default:
+                break;
+        }
+        [ImportExport duplicateChecklistCheck:AOD_PROMPT_USER];
+        //alert dismiss is automatic...
+    } else if ([alertView.title isEqualToString:ALERT_TITLE_IMPORT_CHECKLISTS]) {
+        NSLog(@"button: %d",buttonIndex);
+        switch (buttonIndex) {
+            case 1:
+                NSLog(@"KEEP OLD BY DEFAULT");
+                _defaultImportAction = AOD_KEEP_OLD;
+                break;
+            case 2:
+                NSLog(@"KEEP NEW BY DEFAULT");
+                _defaultImportAction = AOD_KEEP_NEW;
+                break;
+            case 3:
+                NSLog(@"KEEP BOTH BY DEFAULT");
+                _defaultImportAction = AOD_KEEP_BOTH;
+                break;
+            case 4:
+                NSLog(@"KEEP BOTH BY DEFAULT");
+                _defaultImportAction = AOD_PROMPT_USER;
+                break;
+            default:
+                break;
+        }
+        [ImportExport parseChecklistFromUrl]; //start importing
     }
-    //[ImportExport duplicateChecklistCheck:AOD_PROMPT_USER];
-    
-    //dismiss is automatic...
-    
 }
 
 
@@ -520,6 +393,40 @@ static NSMutableArray* _checklists;
     NSString * trimmed = [str stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
     if([trimmed isEqualToString:@"(nil)"]) trimmed = @"";
     return trimmed;
+}
+
+
+
+//TODO: complete if JSON interface required
++ (NSFileHandle*) buildChecklistJSON {
+    //NSManagedObjectContext *moc = [(AppDelegate *) [[UIApplication sharedApplication] delegate] managedObjectContext];
+    NSError *error = nil;
+    NSFetchedResultsController *frc = nil;
+    frc = [Utils checklistCollectionFetchedResultsController:frc withDelegate:self];
+    if(![frc performFetch:&error]){
+        NSLog(@"ERROR: ImportExport::buildChecklistJSON: Error in fetching checklist: %@",error);
+        abort();
+    }
+    //NSEntityDescription *entity = [NSEntityDescription entityForName:@"Checklist" inManagedObjectContext: moc];
+    //NSMutableDictionary *fields = [NSMutableDictionary dictionary];
+    Checklist* cli;
+    
+    for (id object in [frc fetchedObjects]) {
+        cli = (Checklist*)object;
+        //[fields setObject:attributeValue forKey:attributeName];
+    }
+    /*
+     for (NSAttributeDescription *attribute in [entity properties]) {
+     NSString *attributeName = attribute.name;
+     NSLog(@"attribute.name = %@", attributeName);
+     id attributeValue = [moc valueForKey:attributeName];
+     if (attributeValue) {
+     [fields setObject:attributeValue forKey:attributeName];
+     }
+     }
+     */
+    //NSLog(fields);
+    return nil;
 }
 
 @end

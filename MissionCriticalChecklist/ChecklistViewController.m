@@ -444,28 +444,7 @@
 
 -(NSFetchedResultsController*) fetchedResultsController {
     
-    //_fetchedResultsController = [Utils checklistFetchedResultsController:_fetchedResultsController withChecklistName:self.checklist.name withDelegate:self];
     _fetchedResultsController = [Utils checklistFetchedResultsController:_fetchedResultsController withChecklist:self.checklist withDelegate:self];
-    
-    /*
-    if (_fetchedResultsController != nil)  {
-        [NSFetchedResultsController deleteCacheWithName:@"root"];
-        return _fetchedResultsController;
-    }
-    NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
-    NSEntityDescription *entity = [NSEntityDescription entityForName:@"ChecklistItem" inManagedObjectContext: [self managedObjectContext]];
-    [fetchRequest setEntity:entity];
-    // Specify criteria for filtering which objects to fetch
-    //NSPredicate *predicate = [NSPredicate predicateWithFormat:@"action like %@ and checklist like %@", @"*", self.checklist.name];
-    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"checklist.name == %@",self.checklist.name];
-    [fetchRequest setPredicate:predicate];
-    // Specify how the fetched objects should be sorted
-    NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"index" ascending:YES];
-    [fetchRequest setSortDescriptors:[NSArray arrayWithObjects:sortDescriptor, nil]];
-    _fetchedResultsController = [[NSFetchedResultsController alloc] initWithFetchRequest:fetchRequest managedObjectContext:[self managedObjectContext] sectionNameKeyPath:nil cacheName:nil];
-    _fetchedResultsController.delegate = self;
-     */
-    
     return _fetchedResultsController;
 }
 
@@ -633,19 +612,11 @@
 
 -(IBAction)clicked:(id)sender {
     NSIndexPath *indexPath = [self.tableView indexPathForSelectedRow];
-    /* this is just silly, fortunately not needed.
-    UIButton* btn = (UIButton*)sender;
-    CGPoint center = btn.center;
-    CGPoint rootViewPoint = [btn.superview convertPoint:center toView:self.tableView];
-    NSIndexPath *indexPathOfButton = [self.tableView indexPathForRowAtPoint:rootViewPoint];
-    
-    //if(indexPath != indexPathOfButton) return;
-    */
+
     //ok, so now we know the index of the checked item, lets  update that in the managed object
     ChecklistItem* cli = [[_fetchedResultsController fetchedObjects] objectAtIndex:indexPath.row];
     
     //change the switch setting
-    //cli.checked = [NSNumber numberWithBool:sw.isOn];
     cli.checked = [NSNumber numberWithBool:!cli.checked.boolValue];
     
     cli.timestamp = [NSDate date];
@@ -664,10 +635,8 @@
     NSIndexPath *currRow = self.tableView.indexPathForSelectedRow;
     if(currRow.row < [Utils getTotalRows:self.tableView] - 1 ) {
         NSIndexPath *nextRow = [NSIndexPath  indexPathForRow:currRow.row + 1 inSection:currRow.section];
-        //NSLog(@"newIndexPath: %@", newIndexPath);
         [self.tableView selectRowAtIndexPath:nextRow animated:YES scrollPosition:UITableViewScrollPositionMiddle];
         //call event handler manually, since it is not called automatically:
-        //self.selectedRow = nextRow;
         [self tableView:self.tableView didSelectRowAtIndexPath:nextRow];
         
     }

@@ -314,27 +314,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "MissionCriticalChecklist/ImportExport.m"
-            timestampString = "436395340.753442"
+            timestampString = "436466336.989095"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "77"
-            endingLineNumber = "77"
-            landmarkName = "+buildChecklistFile"
-            landmarkType = "5">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "MissionCriticalChecklist/ImportExport.m"
-            timestampString = "436395340.753442"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "122"
-            endingLineNumber = "122"
+            startingLineNumber = "64"
+            endingLineNumber = "64"
             landmarkName = "+buildChecklistFile"
             landmarkType = "5">
          </BreakpointContent>
@@ -346,11 +330,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "MissionCriticalChecklist/ChecklistCollectionViewController.m"
-            timestampString = "436373645.960634"
+            timestampString = "436459657.477675"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "504"
-            endingLineNumber = "504"
+            startingLineNumber = "502"
+            endingLineNumber = "502"
             landmarkName = "-exportChecklistCollectionByEmail:"
             landmarkType = "5">
          </BreakpointContent>
@@ -358,32 +342,16 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            shouldBeEnabled = "Yes"
+            shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "MissionCriticalChecklist/ImportExport.m"
-            timestampString = "436395340.753442"
+            timestampString = "436466836.387187"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "265"
-            endingLineNumber = "265"
-            landmarkName = "+importChecklistsFromURL:"
-            landmarkType = "5">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "MissionCriticalChecklist/ImportExport.m"
-            timestampString = "436395340.753442"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "296"
-            endingLineNumber = "296"
-            landmarkName = "+importChecklistsFromURL:"
+            startingLineNumber = "230"
+            endingLineNumber = "230"
+            landmarkName = "+parseChecklistFromUrl"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
@@ -394,44 +362,12 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "MissionCriticalChecklist/ImportExport.m"
-            timestampString = "436414558.462143"
+            timestampString = "436466836.387187"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "396"
-            endingLineNumber = "396"
-            landmarkName = "+parseChecklistFromUrl:"
-            landmarkType = "5">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "MissionCriticalChecklist/ImportExport.m"
-            timestampString = "436417358.211903"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "490"
-            endingLineNumber = "490"
-            landmarkName = "+alertView:clickedButtonAtIndex:"
-            landmarkType = "5">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "MissionCriticalChecklist/ImportExport.m"
-            timestampString = "436414558.462143"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "383"
-            endingLineNumber = "383"
-            landmarkName = "+parseChecklistFromUrl:"
+            startingLineNumber = "217"
+            endingLineNumber = "217"
+            landmarkName = "+parseChecklistFromUrl"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
@@ -442,12 +378,28 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "MissionCriticalChecklist/ImportExport.m"
-            timestampString = "436417153.2521"
+            timestampString = "436468142.766945"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "445"
-            endingLineNumber = "445"
+            startingLineNumber = "283"
+            endingLineNumber = "283"
             landmarkName = "+duplicateChecklistCheck:"
+            landmarkType = "5">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "MissionCriticalChecklist/ImportExport.m"
+            timestampString = "436467745.206436"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "244"
+            endingLineNumber = "244"
+            landmarkName = "+parseChecklistFromUrl"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>

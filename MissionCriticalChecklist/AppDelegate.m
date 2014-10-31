@@ -175,7 +175,7 @@
         NSMutableArray * newChecklists;
         NSMutableArray * newChecklistItems;
         
-        [ImportExport parseChecklistFromUrl:url];
+        [ImportExport promptImportChecklistsFromUrl:url];
  
     }
     return YES;

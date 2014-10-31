@@ -146,14 +146,14 @@
     
     NSError *error = nil;
     if(![[self fetchedResultsController] performFetch:&error]){
-        NSLog(@"Error in fetching checklist collection: %@",error);
+        NSLog(@"ERROR: ChecklistCollectionViewController::viewDidLoad: Error in fetching checklist collection: %@",error);
         abort();
     }
     
     //if app is newly opened as a handler for a file: fileImportUrl will be populated
     AppDelegate * app = (AppDelegate *) [[UIApplication sharedApplication] delegate];
     if(app.fileImportUrl != nil ||0) {
-        [ImportExport importChecklistsFromURL:app.fileImportUrl];
+        [ImportExport promptImportChecklistsFromUrl:app.fileImportUrl];
         app.fileImportUrl = nil; //completed import, do not want to trigger this behavior again.
     }
 }
@@ -483,8 +483,6 @@
 #pragma mark - mail export handling
 
 -(IBAction)exportChecklistCollectionByEmail:(id)sender {
-    
-    //build checklist string test. TODO: implement:
     
     NSData * attachmentData = [ImportExport buildChecklistFile];
     
