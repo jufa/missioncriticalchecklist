@@ -173,6 +173,13 @@
 			name = Checklist;
 			sourceTree = "<group>";
 		};
+		3F59505B1A027B640049AA91 /* Alerts */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Alerts;
+			sourceTree = "<group>";
+		};
 		3FEC046319F5798400E7AB48 /* ImportExport */ = {
 			isa = PBXGroup;
 			children = (
@@ -217,6 +224,7 @@
 		3FF6498C198D7EB400D189CC /* MissionCriticalChecklist */ = {
 			isa = PBXGroup;
 			children = (
+				3F59505B1A027B640049AA91 /* Alerts */,
 				3FEC046319F5798400E7AB48 /* ImportExport */,
 				3F01D48D19E45BC0003360F9 /* ChecklistHistory */,
 				3FF64995198D7EB400D189CC /* AppDelegate.h */,

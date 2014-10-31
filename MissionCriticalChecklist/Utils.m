@@ -94,7 +94,44 @@
     [fetchRequest setEntity:entity];
     // Specify criteria for filtering which objects to fetch
     //NSPredicate *predicate = [NSPredicate predicateWithFormat:@"action like %@ and checklist like %@", @"*", self.checklist.name];
+    
     NSPredicate *predicate = [NSPredicate predicateWithFormat:@"checklist.name == %@",checklistName];
+
+    
+    [fetchRequest setPredicate:predicate];
+    // Specify how the fetched objects should be sorted
+    NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"index" ascending:YES];
+    [fetchRequest setSortDescriptors:[NSArray arrayWithObjects:sortDescriptor, nil]];
+    fetchedResultsController = [[NSFetchedResultsController alloc] initWithFetchRequest:fetchRequest managedObjectContext:context sectionNameKeyPath:nil cacheName:nil];
+    fetchedResultsController.delegate = delegate;
+    
+    return fetchedResultsController;
+}
+
+
+
+
+
+//test alternate checklist method using objectID:
++(NSFetchedResultsController*) checklistFetchedResultsController:(NSFetchedResultsController*)fetchedResultsController
+                                               withChecklist:(Checklist*)checklist
+                                                    withDelegate:(id)delegate
+{
+    NSManagedObjectContext * context = [(AppDelegate *) [[UIApplication sharedApplication] delegate] managedObjectContext];
+    
+    if (fetchedResultsController != nil)  {
+        [NSFetchedResultsController deleteCacheWithName:@"root"];
+        return fetchedResultsController;
+    }
+    NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
+    NSEntityDescription *entity = [NSEntityDescription entityForName:@"ChecklistItem" inManagedObjectContext: context];
+    [fetchRequest setEntity:entity];
+    // Specify criteria for filtering which objects to fetch
+    //NSPredicate *predicate = [NSPredicate predicateWithFormat:@"action like %@ and checklist like %@", @"*", self.checklist.name];
+    
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"checklist == %@",checklist];
+    
+    
     [fetchRequest setPredicate:predicate];
     // Specify how the fetched objects should be sorted
     NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"index" ascending:YES];

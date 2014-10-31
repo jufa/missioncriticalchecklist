@@ -70,6 +70,7 @@
     [self.tableView endUpdates];
 }
 
+
 #pragma mark - segue management
 
 -(void) prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
@@ -147,6 +148,13 @@
     if(![[self fetchedResultsController] performFetch:&error]){
         NSLog(@"Error in fetching checklist collection: %@",error);
         abort();
+    }
+    
+    //if app is newly opened as a handler for a file: fileImportUrl will be populated
+    AppDelegate * app = (AppDelegate *) [[UIApplication sharedApplication] delegate];
+    if(app.fileImportUrl != nil ||0) {
+        [ImportExport importChecklistsFromURL:app.fileImportUrl];
+        app.fileImportUrl = nil; //completed import, do not want to trigger this behavior again.
     }
 }
 

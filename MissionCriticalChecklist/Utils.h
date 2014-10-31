@@ -18,6 +18,8 @@
 
 + (NSFetchedResultsController*) checklistFetchedResultsController:(NSFetchedResultsController*)fetchedResultsController withChecklistName:(NSString*)checklistName withDelegate:(id)delegate;
 
++(NSFetchedResultsController*) checklistFetchedResultsController:(NSFetchedResultsController*)fetchedResultsController withChecklist:(Checklist*)checklist withDelegate:(id)delegate;
+
 + (NSFetchedResultsController*) checklistCollectionFetchedResultsController:(NSFetchedResultsController*)fetchedResultsController withDelegate:(id)delegate;
 
 + (NSString*)nowAsString;

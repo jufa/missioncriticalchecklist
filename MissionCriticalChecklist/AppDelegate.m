@@ -9,7 +9,9 @@
 #import "AppDelegate.h"
 #import "Utils.h"
 
-@implementation AppDelegate
+@implementation AppDelegate {
+    UINavigationController * rootNavigationController;
+}
 
 @synthesize managedObjectContext = _managedObjectContext;
 @synthesize managedObjectModel = _managedObjectModel;
@@ -18,7 +20,7 @@
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
     
-    //UINavigationController *nav = (UINavigationController *)self.window.rootViewController;
+   rootNavigationController = (UINavigationController *)self.window.rootViewController;
     
     //Pass reference: the managed object context reference in the custom view controller classes:
     //not necessary but improves modularity compared to #including the AppDelegate.h in every view controller. But you have to know the goddamn index.
@@ -163,7 +165,18 @@
 -(BOOL) application:(UIApplication *)application openURL:(NSURL *)url sourceApplication:(NSString *)sourceApplication annotation:(id)annotation
 {
     if (url != nil && [url isFileURL]){
-        [ImportExport importChecklistsFromURL: url];
+        //show checklist collection view:
+        
+        self.fileImportUrl = url;
+        if( rootNavigationController != nil){
+            [rootNavigationController popToRootViewControllerAnimated:NO];
+        }
+        //[ImportExport importChecklistsFromURL:url];
+        NSMutableArray * newChecklists;
+        NSMutableArray * newChecklistItems;
+        
+        [ImportExport parseChecklistFromUrl:url];
+ 
     }
     return YES;
 }

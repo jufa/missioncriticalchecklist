@@ -444,7 +444,8 @@
 
 -(NSFetchedResultsController*) fetchedResultsController {
     
-    _fetchedResultsController = [Utils checklistFetchedResultsController:_fetchedResultsController withChecklistName:self.checklist.name withDelegate:self];
+    //_fetchedResultsController = [Utils checklistFetchedResultsController:_fetchedResultsController withChecklistName:self.checklist.name withDelegate:self];
+    _fetchedResultsController = [Utils checklistFetchedResultsController:_fetchedResultsController withChecklist:self.checklist withDelegate:self];
     
     /*
     if (_fetchedResultsController != nil)  {

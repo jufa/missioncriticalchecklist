@@ -12,30 +12,35 @@
 
 //TODO: reference this for opening email extentions: https://developer.apple.com/library/ios/qa/qa1587/_index.html
 
-@interface ImportExport:NSObject <NSFetchedResultsControllerDelegate>
+@interface ImportExport:NSObject <NSFetchedResultsControllerDelegate, UIAlertViewDelegate>
 
 //public instance variables:
 @property (nonatomic, strong) NSManagedObjectContext *managedObjectContext;
 //@property (nonatomic,strong) NSFetchedResultsController *fetchedResultsController;
+//@property (nonatomic,strong) NSMutableArray * checklists;
 
 
 //public instance methods:
 //TODO: essentially serialize the Managed Object that matches the checklist, return an NSString
-+ (NSString*) buildChecklistString:(Checklist*) checklist;
++(NSString*) buildChecklistString:(Checklist*) checklist;
 
-//TODO: build up the file using multiple calls to buildChecklistString
-+ (NSData*) buildChecklistFile;
-
-+  (NSFileHandle*) buildChecklistJSON;
-
-//TODO: populate the managed object with data from a file
-//Q: what about duplicates? how is one defined? checksum?
--(void) addChecklistsFromFile:(NSFileHandle*) file;
++(NSFileHandle*) buildChecklistJSON;
 
 //returns true if ManagedObject is updated:
 +(BOOL) importChecklistsFromURL:(NSURL*) url;
 
-+ (NSString*)trimWhitespace:(NSString*)str;
++(void) parseChecklistFromUrl:(NSURL*)url;
+
++ (NSData*) buildChecklistFile;
+
++(NSMutableArray*)checklists;
+
++(void) alertChecklistExists:(Checklist*)checklist;
+
++ (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex;
+
++(void) duplicateChecklistCheck:(int)actionOnDuplicates;
+
 
 @end
 
