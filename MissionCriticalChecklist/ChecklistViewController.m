@@ -63,8 +63,8 @@
 }
 
 -(NSDate*) checklistFindEarliest {
-    NSDate* earliest;
-    NSDate* current;
+    NSDate* earliest = nil;
+    NSDate* current = nil;
     ChecklistItem* cli;
     BOOL firstIter = YES;
     
@@ -75,12 +75,13 @@
     for (id object in [[self fetchedResultsController] fetchedObjects]) {
         cli = (ChecklistItem*)object;
         current = cli.timestamp;
-        if([earliest compare:current] == NSOrderedDescending || firstIter){
-            firstIter = NO;
+        if([earliest compare:current] == NSOrderedDescending || earliest == nil && current != nil){
+            //firstIter = NO;
             //current cli timestamp is earlier than our earliest or first iteration:
             earliest = [current copy];
         }
     }
+    //if (earliest == nil) earliest = [NSDate date];
     return earliest;
 }
 
@@ -311,6 +312,8 @@
     ChecklistItemTableViewCell* cell = (ChecklistItemTableViewCell*)[self.tableView cellForRowAtIndexPath:indexPath];
     
     ChecklistItemTableViewCell* prevCell = (ChecklistItemTableViewCell*)[self.tableView cellForRowAtIndexPath:self.selectedRow];
+    
+    if (self.selectedRow == nil) prevCell = nil;
     
     //check if in edit mode:
     if(self.tableView.isEditing){
@@ -555,6 +558,9 @@
         [(NSManagedObject *)[array objectAtIndex:i] setValue:nil forKey:@"timestamp"];
     }
     
+    //ensure active row, if any, is deselected:
+    self.selectedRow = nil;
+    self.selectedCell = nil;
     
     //and resave the whole managed object context:
     NSError *error;

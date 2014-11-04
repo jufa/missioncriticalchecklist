@@ -51,6 +51,11 @@ static NSMutableArray* _checklists;
  *
  * returns a string containing the custom markdown version of the coredata checklists and their checklist items, in order
  *
+ * ### Checklist 1 Type -- Checklist 1 Name -- Checklist 1 Icon Name
+ * --- Action 1 -- Detail 1 -- icon 1 name
+ * --- Action 2 -- Detail 2 -- icon 2 name
+ * ...
+ * ### Checklist 2 Type -- Checklist 2 Name -- Checklist 2 Icon Name
  */
  
 + (NSData*) buildChecklistFile {
@@ -274,7 +279,7 @@ static NSMutableArray* _checklists;
     int currentAction = actionOnDuplicates;
     if(_defaultImportAction != AOD_PROMPT_USER) currentAction = _defaultImportAction;
     if([_checklists count] == 0) return;//TODO: send success alert to user here with number of checklists imported.
-    NSLog(@"checklists left: %d",[_checklists count]);
+    //NSLog(@"checklists left: %d",[_checklists count]);
     for (id object in [frc fetchedObjects]) {
         Checklist* clExisting = (Checklist*)object;
         if(clExisting.objectID == clNew.objectID) continue;
@@ -303,6 +308,7 @@ static NSMutableArray* _checklists;
             }
         }
     }
+    [_checklists removeLastObject]; //no duplicate was found for this new item, so we are done with it.
 }
 
 
@@ -360,7 +366,6 @@ static NSMutableArray* _checklists;
         [ImportExport duplicateChecklistCheck:AOD_PROMPT_USER];
         //alert dismiss is automatic...
     } else if ([alertView.title isEqualToString:ALERT_TITLE_IMPORT_CHECKLISTS]) {
-        NSLog(@"button: %d",buttonIndex);
         switch (buttonIndex) {
             case 1:
                 NSLog(@"KEEP OLD BY DEFAULT");

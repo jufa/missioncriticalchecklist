@@ -250,11 +250,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "MissionCriticalChecklist/ChecklistViewController.m"
-            timestampString = "435883744.094584"
+            timestampString = "436760043.14593"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "140"
-            endingLineNumber = "140"
+            startingLineNumber = "141"
+            endingLineNumber = "141"
             landmarkName = "-prepareForSegue:sender:"
             landmarkType = "5">
          </BreakpointContent>
@@ -266,11 +266,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "MissionCriticalChecklist/ChecklistViewController.m"
-            timestampString = "435883744.094584"
+            timestampString = "436760043.14593"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "382"
-            endingLineNumber = "382"
+            startingLineNumber = "385"
+            endingLineNumber = "385"
             landmarkName = "-tableViewEditing:"
             landmarkType = "5">
          </BreakpointContent>
@@ -314,11 +314,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "MissionCriticalChecklist/ImportExport.m"
-            timestampString = "436466336.989095"
+            timestampString = "436758355.465195"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "64"
-            endingLineNumber = "64"
+            startingLineNumber = "69"
+            endingLineNumber = "69"
             landmarkName = "+buildChecklistFile"
             landmarkType = "5">
          </BreakpointContent>
@@ -346,11 +346,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "MissionCriticalChecklist/ImportExport.m"
-            timestampString = "436466836.387187"
+            timestampString = "436758355.465195"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "230"
-            endingLineNumber = "230"
+            startingLineNumber = "235"
+            endingLineNumber = "235"
             landmarkName = "+parseChecklistFromUrl"
             landmarkType = "5">
          </BreakpointContent>
@@ -362,11 +362,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "MissionCriticalChecklist/ImportExport.m"
-            timestampString = "436466836.387187"
+            timestampString = "436758355.465195"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "217"
-            endingLineNumber = "217"
+            startingLineNumber = "222"
+            endingLineNumber = "222"
             landmarkName = "+parseChecklistFromUrl"
             landmarkType = "5">
          </BreakpointContent>
@@ -378,11 +378,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "MissionCriticalChecklist/ImportExport.m"
-            timestampString = "436468142.766945"
+            timestampString = "436758355.465195"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "283"
-            endingLineNumber = "283"
+            startingLineNumber = "288"
+            endingLineNumber = "288"
             landmarkName = "+duplicateChecklistCheck:"
             landmarkType = "5">
          </BreakpointContent>
@@ -394,12 +394,28 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "MissionCriticalChecklist/ImportExport.m"
-            timestampString = "436467745.206436"
+            timestampString = "436758355.465195"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "244"
-            endingLineNumber = "244"
+            startingLineNumber = "253"
+            endingLineNumber = "253"
             landmarkName = "+parseChecklistFromUrl"
+            landmarkType = "5">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "MissionCriticalChecklist/ChecklistViewController.m"
+            timestampString = "436759551.366385"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "71"
+            endingLineNumber = "71"
+            landmarkName = "-checklistFindEarliest"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
