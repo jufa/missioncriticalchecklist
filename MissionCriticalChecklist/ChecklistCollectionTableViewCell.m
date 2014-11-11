@@ -31,7 +31,7 @@
 -(void) updateWithData:(Checklist *)checklist{
     
     // Configure the cell...
-    self.typeTextField.text = [NSString stringWithFormat:@"%@. %@", checklist.index, checklist.type];
+    self.typeTextField.text = [NSString stringWithFormat:@"%d. %@", checklist.index.intValue + 1, checklist.type];
     //[self setDetailText:checklistItem.detail];
     self.nameTextField.text = checklist.name;
 

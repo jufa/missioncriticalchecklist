@@ -20,6 +20,9 @@
 @property (nonatomic, retain) NSString * type;
 @property (nonatomic, retain) NSString * icon;
 @property (nonatomic, retain) NSDate  * timestamp;
+@property (nonatomic, retain) NSDate  * startTimestamp;
+@property (nonatomic, retain) NSNumber * elapseTime;
+@property (nonatomic, retain) NSNumber * skipped;
 @property (nonatomic, retain) Checklist *checklist;
 
 @end

@@ -22,16 +22,16 @@
 @property (nonatomic, strong) NSString *checklistName;
 @property (nonatomic, strong) Checklist *checklist;
 @property (weak, nonatomic) IBOutlet UIImageView *footerImageLeft;
-@property (weak, nonatomic) IBOutlet UIImageView *footerImageRight;
 @property (weak, nonatomic) IBOutlet UITextField *footerTextField;
-@property (weak, nonatomic) IBOutlet UIButton *nextChecklist;
 @property (weak, nonatomic) IBOutlet UIView *footerView;
-@property (weak, nonatomic) IBOutlet NSLayoutConstraint *footerConstraintBottomSpace;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *tableViewConstraintBottomSpace;
-@property (weak, nonatomic) IBOutlet UIButton *nextChecklistButton;
 @property (weak, nonatomic) IBOutlet UILabel *checklistNameLabel;
 @property (weak, nonatomic) IBOutlet UILabel *checklistTypeLabel;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *progressBarOffset;
+@property (weak, nonatomic) IBOutlet UITextField *itemsSkipped;
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *alertBarOffset;
+@property (weak, nonatomic) IBOutlet UIButton *editButton;
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *currentItemHighlightOffset;
 
 @property (nonatomic,strong) NSFetchedResultsController *fetchedResultsController;
 - (IBAction)beginEdit:(id)sender;

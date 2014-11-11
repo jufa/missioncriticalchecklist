@@ -10,6 +10,8 @@
 		3F01D48919DB6555003360F9 /* ChecklistCollectionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3F01D48819DB6555003360F9 /* ChecklistCollectionViewController.m */; };
 		3F01D48C19DB99F4003360F9 /* ChecklistViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3F01D48B19DB99F4003360F9 /* ChecklistViewController.m */; };
 		3F0417C819B7F6150082FD0B /* UITextFieldOrdered.m in Sources */ = {isa = PBXBuildFile; fileRef = 3F0417C719B7F6150082FD0B /* UITextFieldOrdered.m */; };
+		3F59505F1A0BD7FE0049AA91 /* Sample Checklist Markdown.txt in Resources */ = {isa = PBXBuildFile; fileRef = 3F59505E1A0BD7FE0049AA91 /* Sample Checklist Markdown.txt */; };
+		3F8F3FD71A0DBF04006EA047 /* MCCTextView.m in Sources */ = {isa = PBXBuildFile; fileRef = 3F8F3FD61A0DBF04006EA047 /* MCCTextView.m */; };
 		3FAAC5EE19A9205B00EC4046 /* AddChecklistViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3FAAC5ED19A9205B00EC4046 /* AddChecklistViewController.m */; };
 		3FAAC5F119AE798300EC4046 /* Checklist.m in Sources */ = {isa = PBXBuildFile; fileRef = 3FAAC5F019AE798300EC4046 /* Checklist.m */; };
 		3FAAC5F319AEBB2D00EC4046 /* learning notes.rtf in Resources */ = {isa = PBXBuildFile; fileRef = 3FAAC5F219AEBB2D00EC4046 /* learning notes.rtf */; };
@@ -21,6 +23,7 @@
 		3FB8CABC19C4D03F00DA6C13 /* Utils.m in Sources */ = {isa = PBXBuildFile; fileRef = 3FB8CABB19C4D03F00DA6C13 /* Utils.m */; };
 		3FCC4A2F19FAD740005BFB55 /* MessageUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3FCC4A2E19FAD740005BFB55 /* MessageUI.framework */; };
 		3FCC4A3119FAE7C6005BFB55 /* MainStoryboard.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3FCC4A3019FAE7C6005BFB55 /* MainStoryboard.storyboard */; };
+		3FE2A7451A0BE15E000A7FC3 /* AppIcon76x76@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3FE2A7441A0BE15E000A7FC3 /* AppIcon76x76@2x.png */; };
 		3FEC046719F57E2800E7AB48 /* ImportExport.m in Sources */ = {isa = PBXBuildFile; fileRef = 3FEC046619F57E2800E7AB48 /* ImportExport.m */; };
 		3FF64985198D7EB400D189CC /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3FF64984198D7EB400D189CC /* Foundation.framework */; };
 		3FF64987198D7EB400D189CC /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3FF64986198D7EB400D189CC /* CoreGraphics.framework */; };
@@ -60,6 +63,9 @@
 		3F01D48E19E45C2F003360F9 /* MissionCriticalChecklist 2.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "MissionCriticalChecklist 2.xcdatamodel"; sourceTree = "<group>"; };
 		3F0417C619B7F6150082FD0B /* UITextFieldOrdered.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UITextFieldOrdered.h; sourceTree = "<group>"; };
 		3F0417C719B7F6150082FD0B /* UITextFieldOrdered.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UITextFieldOrdered.m; sourceTree = "<group>"; };
+		3F59505E1A0BD7FE0049AA91 /* Sample Checklist Markdown.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "Sample Checklist Markdown.txt"; sourceTree = "<group>"; };
+		3F8F3FD51A0DBF04006EA047 /* MCCTextView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MCCTextView.h; sourceTree = "<group>"; };
+		3F8F3FD61A0DBF04006EA047 /* MCCTextView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MCCTextView.m; sourceTree = "<group>"; };
 		3FAAC5EC19A9205B00EC4046 /* AddChecklistViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AddChecklistViewController.h; sourceTree = "<group>"; };
 		3FAAC5ED19A9205B00EC4046 /* AddChecklistViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AddChecklistViewController.m; sourceTree = "<group>"; };
 		3FAAC5EF19AE798200EC4046 /* Checklist.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Checklist.h; sourceTree = "<group>"; };
@@ -78,6 +84,7 @@
 		3FB8CABB19C4D03F00DA6C13 /* Utils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Utils.m; sourceTree = "<group>"; };
 		3FCC4A2E19FAD740005BFB55 /* MessageUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MessageUI.framework; path = System/Library/Frameworks/MessageUI.framework; sourceTree = SDKROOT; };
 		3FCC4A3019FAE7C6005BFB55 /* MainStoryboard.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = MainStoryboard.storyboard; sourceTree = "<group>"; };
+		3FE2A7441A0BE15E000A7FC3 /* AppIcon76x76@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "AppIcon76x76@2x.png"; sourceTree = "<group>"; };
 		3FEC046619F57E2800E7AB48 /* ImportExport.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ImportExport.m; sourceTree = "<group>"; };
 		3FEC046819F585B300E7AB48 /* ImportExport.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ImportExport.h; sourceTree = "<group>"; };
 		3FF64981198D7EB400D189CC /* MissionCriticalChecklist.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MissionCriticalChecklist.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -192,6 +199,7 @@
 		3FF64978198D7EB400D189CC = {
 			isa = PBXGroup;
 			children = (
+				3FE2A7441A0BE15E000A7FC3 /* AppIcon76x76@2x.png */,
 				3FF6498C198D7EB400D189CC /* MissionCriticalChecklist */,
 				3FF649A9198D7EB400D189CC /* MissionCriticalChecklistTests */,
 				3FF64983198D7EB400D189CC /* Frameworks */,
@@ -224,6 +232,7 @@
 		3FF6498C198D7EB400D189CC /* MissionCriticalChecklist */ = {
 			isa = PBXGroup;
 			children = (
+				3F59505E1A0BD7FE0049AA91 /* Sample Checklist Markdown.txt */,
 				3F59505B1A027B640049AA91 /* Alerts */,
 				3FEC046319F5798400E7AB48 /* ImportExport */,
 				3F01D48D19E45BC0003360F9 /* ChecklistHistory */,
@@ -237,6 +246,8 @@
 				3F0417C419B7C6450082FD0B /* ChecklistCollection */,
 				3FAAC5F219AEBB2D00EC4046 /* learning notes.rtf */,
 				3F0417C619B7F6150082FD0B /* UITextFieldOrdered.h */,
+				3F8F3FD51A0DBF04006EA047 /* MCCTextView.h */,
+				3F8F3FD61A0DBF04006EA047 /* MCCTextView.m */,
 				3F0417C719B7F6150082FD0B /* UITextFieldOrdered.m */,
 				3FB8CAB419C295A100DA6C13 /* UICollectionViewCellWithImage.h */,
 				3FB8CAB519C295A100DA6C13 /* UICollectionViewCellWithImage.m */,
@@ -354,8 +365,10 @@
 			files = (
 				3FB8CAB319C28BE100DA6C13 /* ChecklistItemIcons.plist in Resources */,
 				3FCC4A3119FAE7C6005BFB55 /* MainStoryboard.storyboard in Resources */,
+				3F59505F1A0BD7FE0049AA91 /* Sample Checklist Markdown.txt in Resources */,
 				3FAAC5F319AEBB2D00EC4046 /* learning notes.rtf in Resources */,
 				3FF64991198D7EB400D189CC /* InfoPlist.strings in Resources */,
+				3FE2A7451A0BE15E000A7FC3 /* AppIcon76x76@2x.png in Resources */,
 				3FF6499C198D7EB400D189CC /* Images.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -392,6 +405,7 @@
 				3FF64997198D7EB400D189CC /* AppDelegate.m in Sources */,
 				3FF64993198D7EB400D189CC /* main.m in Sources */,
 				3FF649C6198F060500D189CC /* AddChecklistItemViewController.m in Sources */,
+				3F8F3FD71A0DBF04006EA047 /* MCCTextView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

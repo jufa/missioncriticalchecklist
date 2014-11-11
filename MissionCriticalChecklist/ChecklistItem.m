@@ -19,6 +19,9 @@
 @dynamic icon;
 @dynamic type;
 @dynamic checklist;
+@dynamic startTimestamp;
 @dynamic timestamp;
+@dynamic elapseTime;
+@dynamic skipped;
 
 @end

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<model userDefinedModelVersionIdentifier="" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="6244" systemVersion="13F34" minimumToolsVersion="Automatic" macOSVersion="Automatic" iOSVersion="Automatic">
+<model userDefinedModelVersionIdentifier="" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="6252" systemVersion="14A389" minimumToolsVersion="Automatic" macOSVersion="Automatic" iOSVersion="Automatic">
     <entity name="Checklist" representedClassName="Checklist" syncable="YES">
         <attribute name="icon" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="index" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
@@ -12,6 +12,7 @@
         <attribute name="itemsCompleted" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
         <attribute name="started" optional="YES" attributeType="Date" syncable="YES"/>
         <relationship name="checklist" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Checklist" syncable="YES"/>
+        <relationship name="checklistItem" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="ChecklistItem" syncable="YES"/>
     </entity>
     <entity name="ChecklistItem" representedClassName="ChecklistItem" syncable="YES">
         <attribute name="action" optional="YES" attributeType="String" defaultValueString="ACTION" syncable="YES"/>
@@ -25,7 +26,7 @@
     </entity>
     <elements>
         <element name="Checklist" positionX="-272" positionY="48" width="128" height="120"/>
-        <element name="ChecklistHistory" positionX="-144" positionY="90" width="128" height="105"/>
+        <element name="ChecklistHistory" positionX="-144" positionY="90" width="128" height="120"/>
         <element name="ChecklistItem" positionX="-54" positionY="0" width="128" height="165"/>
     </elements>
 </model>

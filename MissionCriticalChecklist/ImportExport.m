@@ -141,8 +141,21 @@ static NSMutableArray* _checklists;
 
 
 + (int) numberOfChecklistsInUrlString:(NSURL*)url {
-    int count = -1;
-    return count;
+    
+    if (url == nil) return -1;  //&& [url isFileURL
+    
+    //get file string:
+    NSError * err;
+    
+    NSString *str = [NSString stringWithContentsOfURL:url encoding:NSUTF8StringEncoding error: &err]; //needs indirect reference to error obj
+    //TODO: error handling:
+    
+    if(err)NSLog(@"ERROR: numberOfChecklistsInUrlString -> Error converting url to string");
+    
+    //create array of checklist strings, 1 checklist per array item:
+    NSArray * checklistsArray = [str componentsSeparatedByString:@"###"];
+    
+    return [checklistsArray count]-1;
 }
 
 
@@ -218,7 +231,7 @@ static NSMutableArray* _checklists;
                 newChecklist = (Checklist*)[NSEntityDescription insertNewObjectForEntityForName:@"Checklist" inManagedObjectContext:moc];
                 newChecklist.name = [self trimWhitespace:checklistEntries[0]];
                 newChecklist.type = [self trimWhitespace:checklistEntries[1]];
-                newChecklist.icon = [self trimWhitespace:checklistEntries[2]];
+                if ([checklistEntries count] > 2) newChecklist.icon = [self trimWhitespace:checklistEntries[2]];
                 newChecklist.index = [NSNumber numberWithInt:checklistIndex++];
                 [_checklists addObject:newChecklist];
                 //reset the enumeration index for checklistItems:
@@ -228,7 +241,7 @@ static NSMutableArray* _checklists;
                 ChecklistItem* cli = (ChecklistItem*)[NSEntityDescription insertNewObjectForEntityForName:@"ChecklistItem" inManagedObjectContext:moc];
                 cli.action = [self trimWhitespace:checklistEntries[0]];
                 cli.detail = [self trimWhitespace:checklistEntries[1]];
-                cli.icon = [self trimWhitespace:checklistEntries[2]];
+                if ([checklistEntries count] > 2) cli.icon = [self trimWhitespace:checklistEntries[2]];
                 cli.checked = [NSNumber numberWithBool:NO];
                 cli.index = [NSNumber numberWithInt: currentChecklistItemInsertionIndex++];
                 //must use the mutable set method. it will automatically dispatch the right event to ensure inverse relationship is set:
@@ -283,8 +296,10 @@ static NSMutableArray* _checklists;
     for (id object in [frc fetchedObjects]) {
         Checklist* clExisting = (Checklist*)object;
         if(clExisting.objectID == clNew.objectID) continue;
+        //NSLog(@"comparing: -----%@/%@-----%@/%@-----",clExisting.name,clExisting.type,clNew.name,clNew.type);
         if([clExisting.name isEqualToString:clNew.name]){
             if([clExisting.type isEqualToString:clNew.type]){
+                NSLog(@"MATCH!");
                 switch (currentAction) {
                     case AOD_KEEP_OLD:
                         [_checklists removeLastObject];
@@ -317,8 +332,10 @@ static NSMutableArray* _checklists;
 #pragma mark - alerts
 + (void) promptImportChecklistsFromUrl:(NSURL*)url {
     _importUrl = url;
+    int checklistCount = [ImportExport numberOfChecklistsInUrlString:url];
+    NSString * plural = checklistCount>1?@"s":@"";;
     UIAlertView *alert = [[UIAlertView alloc] initWithTitle: ALERT_TITLE_IMPORT_CHECKLISTS
-                                                    message:[NSString stringWithFormat:@"Importing %d new Checklists. Select your default action if duplicates are found:",[ImportExport numberOfChecklistsInUrlString:url]]
+                                                    message:[NSString stringWithFormat:@"Importing %d new Checklist%@. Select your default action if duplicates are found:",checklistCount, plural ]
                                                    delegate:self
                                           cancelButtonTitle:@"Cancel Import"
                                           otherButtonTitles:nil];
@@ -395,7 +412,7 @@ static NSMutableArray* _checklists;
 
 //remove leading and trailing whitespace from a string;
 + (NSString*)trimWhitespace:(NSString*)str {
-    NSString * trimmed = [str stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
+    NSString * trimmed = [str stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
     if([trimmed isEqualToString:@"(nil)"]) trimmed = @"";
     return trimmed;
 }

@@ -10,6 +10,12 @@
 
 @implementation ChecklistItemTableViewCell {
     BOOL editing;
+    BOOL _currentSelection;
+    BOOL _realttimeTimestamp;
+    BOOL _skipped;
+    NSTimer * _elapseTimer;
+    
+    checklistItemCompletionState _completionState; //enum
 }
 
 
@@ -19,59 +25,95 @@
     if (self) {
         // @see: http://justabunchoftyping.com/fix-for-ios7-uitextview-issues
         editing = NO;
+        _currentSelection = NO;
+        _completionState = CLI_INCOMPLETE;
+        _elapseTimer = nil;
     }
     return self;
 }
 
+
 - (void)awakeFromNib
 {
     // Initialization code
+    
 }
 
--(void) updateWithData:(ChecklistItem *)checklistItem AndStartTime:(NSDate*)startTime{
+
+-(void) updateWithData:(ChecklistItem *)checklistItem AndStartTime:(NSDate*)startTime AndSelectedTime:(NSTimeInterval)selectedTime{
     
      // Configure the cell...
-     self.actionTextField.text = [NSString stringWithFormat:@"%@. %@", checklistItem.index, checklistItem.action];
-     [self setDetailText:checklistItem.detail];
+    self.actionTextField.text = [NSString stringWithFormat:@"%d. %@", checklistItem.index.intValue+1, checklistItem.action];
+    //NSLog(@"new start time: %@",startTime);
+    
+    [self setDetailText:checklistItem.detail];
 
-     [self setTimestamp:checklistItem.timestamp AndStartTime:startTime];
+    [self setTimestamp:checklistItem.timestamp AndStartTime:startTime AndSelectedTime:selectedTime];
+    
+    //image:
+    NSString *imageToLoad = [NSString stringWithFormat:@"%@.png", checklistItem.icon];
+    self.icon.image = [UIImage imageNamed:imageToLoad];
      
-     //image:
-     NSString *imageToLoad = [NSString stringWithFormat:@"%@.png", checklistItem.icon];
-     self.icon.image = [UIImage imageNamed:imageToLoad];
-     
-     //backgrounds:
-     if(checklistItem.checked.boolValue == YES) [self setMode:@"complete"];
-     if(checklistItem.checked.boolValue == NO) [self setMode:@"incomplete"];
+    //backgrounds:
+    if ( checklistItem.checked.boolValue == YES) _completionState = CLI_COMPLETE;
+    else _completionState = CLI_INCOMPLETE;
+    if ( checklistItem.skipped.boolValue == YES) _completionState = CLI_SKIPPED; //this overrides incomplete since it is bad to skip!
+    
+    [self refreshButtons];
+    
+    //centre - needs to be done for any cells that are out of scroll view:
+    [self.actionTextField vcenter];
+    [self.detailTextField vcenter];
     
 }
-- (void)setSelected:(BOOL)selected animated:(BOOL)animated
-{
-    [super setSelected:selected animated:animated];
 
+
+-(BOOL)isCurrentSelection{
+    return _currentSelection;
+}
+
+- (void)setCurrentSelection:(BOOL)newVal
+{
+    [self setSelected:newVal animated:NO];
     // Configure the view for the selected state
     //enable the check swith:
-    self.check.enabled = selected;
-    self.checkLeft.enabled = selected;
-    
+    _currentSelection = newVal;
+    self.checkButtonLeft.enabled = newVal;
+    self.checkButtonRight.enabled = newVal;
+    [self refreshButtons]; //refresh
 }
 
--(void) setMode:(NSString*)mode {
+
+-(void) refreshButtons {
+    //TODO: skipped indication
     NSString* suffix;
     
-    if ([mode isEqualToString:@"incomplete"]) {
+    checklistItemCompletionState mode = _completionState;
+    
+    if (mode == CLI_INCOMPLETE) {
         suffix = @"grey";
-        [self hideTimestamps:YES];
-    } else if ([mode isEqualToString:@"complete"]) {
+        [self hideTimestamps:NO];
+    } else if (mode == CLI_COMPLETE) {
         suffix = @"green";
         [self hideTimestamps:NO];
-    } else if ([mode isEqualToString:@"skipped"]) {
-        suffix = @"blue";
-        [self hideTimestamps:YES];
+    } else if (mode == CLI_SKIPPED) {
+        suffix = @"red";
+        [self hideTimestamps:NO];
     }
+    
+    //override if selected:
+    if(_currentSelection && _completionState != CLI_COMPLETE) {
+        //suffix = @"blue";
+        [self hideTimestamps:NO];
+    }
+    
+    //TODO: transition animation?
+    
+    //realtimeTimestamp Update:
+    
+    
     //set left and right switch background images:
     self.backgroundLeft.image = [UIImage imageNamed: [NSString stringWithFormat:@"cli-bg-left-%@", suffix]];
-    
     self.backgroundRight.image = [UIImage imageNamed: [NSString stringWithFormat:@"cli-bg-right-%@", suffix]];
     
 }
@@ -81,6 +123,8 @@
     self.elapseTimeStamp.hidden = hidden;
     
 }
+
+
 -(void) setDetailText:(NSString*)text{
     self.detailTextField.text = text;
 }
@@ -103,21 +147,22 @@
     
 }
 
--(void) reset {
-    [self.check setOn: NO];
-    [self.checkLeft setOn: NO];
-}
 
--(void) setTimestamp:(NSDate*)date AndStartTime:(NSDate*)startDate {
+-(void) setTimestamp:(NSDate*)date AndStartTime:(NSDate*)startDate AndSelectedTime:(NSTimeInterval)selectedTime {
+
     NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
     [formatter setDateFormat:@"hh:mm:ss"];
     NSString *stringFromDate = [formatter stringFromDate:date];
     self.timeStamp.text = stringFromDate;
-    
-    [self setElapseTimeFrom:date To:startDate];
+    if (USE_TIME_TO_COMPLETE) {
+        [self updateSelectedTime:selectedTime];
+    } else {
+        [self setElapseTimeFrom:date To:startDate];
+    }
+
 }
 
-//TODO: implement this:
+
 -(void) setElapseTimeFrom:(NSDate*)startDate To:(NSDate*)endDate {
     if(startDate == nil) {
         //NSLog(@"startdate is nil");
@@ -148,6 +193,20 @@
     }    
 }
 
+//when selected, there is a running elapsetime. This updates only that section
+-(void) updateSelectedTime:(NSTimeInterval)selectedTime {
+    
+    NSDate *date = [NSDate dateWithTimeIntervalSince1970:selectedTime];
+    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+    [dateFormatter setDateFormat:@"mm:ss"];
+    [dateFormatter setTimeZone:[NSTimeZone timeZoneWithName:@"UTC"]];
+    NSString *formattedDate = [dateFormatter stringFromDate:date];
+    //NSLog(@"+mm:ss %@", formattedDate);
+    
+    self.elapseTimeStamp.text = [NSString stringWithFormat:@"+%@", formattedDate];
+}
+
+
 
 -(void)selected:(BOOL)selected {
     self.checkButtonRight.enabled = selected;
@@ -156,5 +215,7 @@
 
 - (IBAction)checkToggled:(id)sender {
 }
+
+
 @end
 

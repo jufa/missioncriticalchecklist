@@ -1,0 +1,40 @@
+###ENGINE START--C172
+---Hobbs meter--RECORD
+---Passengers--BRIEF (See Briefings)
+---Avionics Master--OFF
+---Radios & transponder--OFF
+---All switches--OFF
+---Beacon--ON
+---Circuit breakers--CHECKED IN
+---Fuel--ON LEFT
+---Mixture--RICH
+---Throttle--SET 1/4 inch or 0.5cm
+---Carb Heat--COLD
+---Magnetos--ON BOTH
+---Prime--(2 - 3 Shots MAX)
+---Master--BATTERY ONLY - ON
+---Brakes--SET
+---Check--ALL CLEAR
+---Start Engine (1000 RPM)--
+
+###ENGINE RUNUP--C172
+---Mixture--RICH
+---Throttle--1700 RPM
+---Suction gauge--CHECK
+---Engine instruments & ammeter--CHECK
+---Magnetos--CHECK (125 RPM max drop, 50 RPM max diff)
+---Carb heat--ON (check for drop in RPM)
+---Throttle	-- FULL OUT (check for idle)
+---Carb heat--OFF
+---Throttle	--800-1000 RPM
+---Mixture--	AS REQUIRED
+
+###POST-RUNUP--C172
+---Radio--ATIS FREQ
+---ATIS--COPY
+---Flight instruments--SET
+---Departure Briefing--COMPLETE
+---Radio--GROUND CTRL FREQ
+---Ground Control--GET TAXI CLEARANCE
+---Parking brake--RELEASE
+---BEFORE TAKEOFF--CHECK COMPLETE

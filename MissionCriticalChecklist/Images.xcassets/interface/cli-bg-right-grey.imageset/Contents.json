@@ -3,17 +3,17 @@
     {
       "idiom" : "universal",
       "scale" : "1x",
-      "filename" : "clig-bg-right-gry.png"
+      "filename" : "cli-bg-right-grey.png"
     },
     {
       "idiom" : "universal",
       "scale" : "2x",
-      "filename" : "clig-bg-right-gry@2x.png"
+      "filename" : "cli-bg-right-grey@2x.png"
     },
     {
       "idiom" : "universal",
       "scale" : "3x",
-      "filename" : "clig-bg-right-gry@3x.png"
+      "filename" : "cli-bg-right-grey@3x.png"
     }
   ],
   "info" : {

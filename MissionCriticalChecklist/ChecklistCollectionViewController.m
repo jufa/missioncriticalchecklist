@@ -319,7 +319,7 @@
             // Handle error
         }
         
-        [self.tableView reloadData]; //debug
+        //[self.tableView reloadData]; //debug
         
     } else {
         self.inReorderingOperation = NO;
@@ -365,7 +365,7 @@
     NSError *error;
     [self.managedObjectContext save:&error];
     
-    [self.tableView reloadData];
+    //[self.tableView reloadData];
     
     
 }
@@ -401,7 +401,7 @@
             }
             self.inReorderingOperation = NO;
             
-            [tableView reloadData]; //debug
+            //[tableView reloadData]; //debug
            
         }
             break;
