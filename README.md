@@ -1,4 +1,4 @@
-# missioncriticalchecklist
+# "Go! Flight" Checklist App for pilots
 
 Private pilots are using iPads more and more to manage digital documentation. 
 
@@ -12,4 +12,4 @@ This project aims to create a checklist App that allows pilots to
  - audit checklist performance from past uses
  
  # Demo video
-[![Go! Flight App Overview and Demo](https://user-images.githubusercontent.com/3287519/83948950-eee10200-a7ee-11ea-890b-b322e7270bcd.png) ](ttps://www.youtube.com/embed/tcQH3VmPWXo "Go! Flight App Overview and Demo")
+[![Go! Flight App Overview and Demo](https://user-images.githubusercontent.com/3287519/83948950-eee10200-a7ee-11ea-890b-b322e7270bcd.png) ](https://www.youtube.com/embed/tcQH3VmPWXo "Go! Flight App Overview and Demo")
